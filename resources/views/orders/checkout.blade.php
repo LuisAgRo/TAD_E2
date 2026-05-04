@@ -74,6 +74,41 @@
                         @enderror
 
                         <hr>
+
+                        {{-- DIRECCIÓN DE FACTURACIÓN --}}
+                        <h5 class="fw-bold mb-3">Dirección de facturación</h5>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="same_address" id="same_address" checked
+                                onchange="toggleInvoiceAddress()">
+                            <label class="form-check-label" for="same_address">
+                                Misma que la dirección de envío
+                            </label>
+                        </div>
+
+                        <div id="invoice_address_section" style="display:none;">
+                            @foreach($addresses as $address)
+                            <div class="form-check border rounded p-3 mb-2">
+                                <input class="form-check-input" type="radio" name="invoice_address_id"
+                                    value="{{ $address->id }}"
+                                    id="invoice_{{ $address->id }}"
+                                    {{ $loop->first ? 'checked' : '' }}>
+                                <label class="form-check-label" for="invoice_{{ $address->id }}">
+                                    <strong>{{ $address->street }}</strong><br>
+                                    {{ $address->postal_code }} {{ $address->city }}<br>
+                                    {{ $address->country }}
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <script>
+                        function toggleInvoiceAddress() {
+                            const section = document.getElementById('invoice_address_section');
+                            const checked = document.getElementById('same_address').checked;
+                            section.style.display = checked ? 'none' : 'block';
+                        }
+                        </script>
+
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-bold fs-5">Total:</span>
                             <span class="fw-bold fs-5" style="color:#C0392B;">{{ number_format($total, 2) }} €</span>

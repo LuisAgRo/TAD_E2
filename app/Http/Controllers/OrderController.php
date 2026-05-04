@@ -28,6 +28,8 @@ class OrderController extends Controller
         return view('orders.checkout', compact('items', 'addresses', 'total'));
     }
 
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -44,16 +46,30 @@ class OrderController extends Controller
 
         $order = null;
 
-        DB::transaction(function () use ($user, $items, $request, &$order) {
+        try {
+            DB::beginTransaction();
+
+            $address = Address::findOrFail($request->address_id);
+            $deliveryText = $address->street . ', ' . $address->postal_code . ' ' . $address->city . ', ' . $address->country;
+
+            if ($request->has('same_address') || !$request->invoice_address_id) {
+                $invoiceText = $deliveryText;
+            } else {
+                $invoiceAddress = Address::findOrFail($request->invoice_address_id);
+                $invoiceText = $invoiceAddress->street . ', ' . $invoiceAddress->postal_code . ' ' . $invoiceAddress->city . ', ' . $invoiceAddress->country;
+            }
+
             $total = $items->sum(fn($item) => $item->product->price * $item->quantity);
 
             $order = Order::create([
-                'user_id'      => $user->id,
-                'address_id'   => $request->address_id,
-                'order_number' => 'ORD-' . strtoupper(uniqid()),
-                'total_amount' => $total,
-                'status'       => 'pending',
-                'ordered_at'   => now(),
+                'user_id'          => $user->id,
+                'address_id'       => $request->address_id,
+                'order_number'     => 'ORD-' . strtoupper(uniqid()),
+                'total_amount'     => $total,
+                'status'           => 'pending',
+                'ordered_at'       => now(),
+                'delivery_address' => $deliveryText,
+                'invoice_address'  => $invoiceText,
             ]);
 
             foreach ($items as $item) {
@@ -68,9 +84,16 @@ class OrderController extends Controller
             }
 
             $user->cartItems()->delete();
-        });
 
-        $orderForEmail = Order::with('items.product', 'address', 'user')->find($order->id);
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('cart.index')
+                ->with('error', 'Error al procesar el pedido. Inténtalo de nuevo.');
+        }
+
+        $orderForEmail = Order::with('items.product', 'user')->find($order->id);
         Mail::to($user->email)->send(new OrderConfirmation($orderForEmail));
 
         return redirect()->route('orders.index')
@@ -80,7 +103,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::where('user_id', Auth::id())
-            ->with('items.product', 'address')
+            ->with('items.product')
             ->latest()
             ->get();
 
@@ -89,7 +112,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $query = Order::with('items.product', 'address');
+        $query = Order::with('items.product');
 
         if (auth()->user()->role_id === 1) {
             $order = $query->findOrFail($id);
@@ -117,7 +140,7 @@ class OrderController extends Controller
 
     public function adminIndex()
     {
-        $orders = Order::with('user', 'items.product', 'address')
+        $orders = Order::with('user', 'items.product')
             ->latest()
             ->get();
 

@@ -50,9 +50,7 @@
         <p class="total">Total: {{ number_format($order->total_amount, 2) }} €</p>
 
         <p><strong>Dirección de envío:</strong><br>
-        {{ $order->address->street }}<br>
-        {{ $order->address->postal_code }} {{ $order->address->city }}<br>
-        {{ $order->address->country }}</p>
+        {{ $order->delivery_address }}</p>
 
         <p>Puedes ver el estado de tu pedido en tu perfil.</p>
     </div>
