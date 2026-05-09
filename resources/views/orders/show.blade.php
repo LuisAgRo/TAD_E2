@@ -73,9 +73,14 @@
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
                 <h5 class="fw-bold mb-3">Dirección de envío</h5>
-                <p class="mb-1">{{ $order->address->street }}</p>
-                <p class="mb-1">{{ $order->address->postal_code }} {{ $order->address->city }}</p>
-                <p class="mb-0">{{ $order->address->country }}</p>
+                <p class="mb-0">{{ $order->delivery_address }}</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mt-3">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Dirección de facturación</h5>
+                <p class="mb-0">{{ $order->invoice_address }}</p>
             </div>
         </div>
     </div>
