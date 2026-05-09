@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmation;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {
@@ -17,18 +19,72 @@ class OrderController extends Controller
         $user = Auth::user();
         $items = $user->cartItems()->with('product')->get();
 
+        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+
+        $lineItems = [];
+
+        foreach ($items as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $item->product->name,
+                    ],
+                    'unit_amount' => $item->product->price * 100,
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
+        $checkout_session = $stripe->checkout->sessions->create([
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => route('orders.checkout.success', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
+            'cancel_url' => route('orders.checkout.cancel', [], true),
+        ]);
+
+        $order = new Order();
+        $order->user_id = $user->id;
+        $order->status = 'pending';
+        $order->total_amount = $items->sum(fn($item) => $item->product->price * $item->quantity);
+        $order->session_id = $checkout_session->id;
+
         if ($items->isEmpty()) {
             return redirect()->route('cart.index')
                 ->with('error', 'Tu carrito está vacío.');
         }
 
         $addresses = Address::where('user_id', $user->id)->get();
-        $total = $items->sum(fn($item) => $item->product->price * $item->quantity);
 
-        return view('orders.checkout', compact('items', 'addresses', 'total'));
+        return redirect($checkout_session->url);
     }
 
-    
+    public function showCheckoutSuccess(Request $request)
+    {
+        try {
+            $user_session = $request->query('session_id');
+
+            if (!$user_session) {
+                throw new NotFoundHttpException('User session not found');
+            }
+
+            $user = Auth::user();
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+
+            $payment_session = $stripe->checkout->sessions->retrieve($user_session);
+            if (!$payment_session) {
+                throw new NotFoundHttpException('User session not found');
+            }
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException('Session not found');
+        }
+        return view('orders.checkout_success', compact('user'));
+    }
+
+    public function showCheckoutCancel()
+    {
+        return view('orders.checkout_cancel');
+    }
 
     public function store(Request $request)
     {
