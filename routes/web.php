@@ -15,7 +15,9 @@ use App\Http\Controllers\FavoriteController;
 Route::middleware('auth')->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders');
     Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-    Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::get('/checkout/success', [OrderController::class, 'showCheckoutSuccess'])->name('orders.checkout.success');
+    Route::get('/checkout/cancel', [OrderController::class, 'showCheckoutCancel'])->name('orders.checkout.cancel');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
