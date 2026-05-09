@@ -33,9 +33,14 @@ php artisan key:generate
 Abre `.env` y edita estas líneas con tus credenciales:### 5. Crear la base de datos
 En MySQL o phpMyAdmin crea una base de datos llamada `bermellonshop`.
 
-### 6. Ejecutar migraciones
+### 5. Ejecutar migraciones y seeders
 ```bash
 php artisan migrate
+```
+
+### 6. Ejecutar seeder
+```bash
+php artisan db:seed
 ```
 
 ### 7. Compilar assets
@@ -48,7 +53,12 @@ npm run build
 php artisan storage:link
 ```
 
-### 9. Arrancar el servidor
+### 9. Enlace de almacenamiento para imágenes
+```bash
+php artisan storage:link
+```
+
+### 10. Arrancar el servidor
 ```bash
 php artisan serve
 ```
@@ -69,3 +79,12 @@ MAIL_PASSWORD=tu_password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=noreply@bermellonshop.com
 MAIL_FROM_NAME="BermellonShop"
+
+
+## 🔐 Credenciales de prueba
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| **Admin** | admin@bermellonshop.com | admin1234 |
+| **Cliente** | cliente@bermellonshop.com | cliente1234 |
+
