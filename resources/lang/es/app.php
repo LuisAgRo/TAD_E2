@@ -130,6 +130,7 @@ return [
     'product_added_cart' => 'Producto añadido al carrito.',
     'add_new_address' => 'Añadir nueva dirección',
     'address_added'   => 'Dirección añadida correctamente.',
+    'address_updated' => 'Dirección actualizada correctamente.',
     'data_updated'        => 'Datos actualizados correctamente',
     'wrong_password'      => 'La contraseña actual no es correcta',
     'password_updated'    => 'Contraseña actualizada correctamente',

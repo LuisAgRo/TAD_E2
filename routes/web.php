@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/info', [ProfileController::class, 'updateInfo'])->name('profile.updateInfo');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.storeAddress');
+    Route::put('/profile/addresses/{id}', [ProfileController::class, 'updateAddress'])->name('profile.updateAddress');
     Route::delete('/profile/addresses/{id}', [ProfileController::class, 'destroyAddress'])->name('profile.destroyAddress');
     Route::post('/profile/payment-methods', [ProfileController::class, 'storePaymentMethod'])->name('profile.storePaymentMethod');
     Route::delete('/profile/payment-methods/{id}', [ProfileController::class, 'destroyPaymentMethod'])->name('profile.destroyPaymentMethod');

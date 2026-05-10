@@ -117,6 +117,49 @@ class ProfileController extends Controller
             ->with('active_tab', 'direcciones');
     }
 
+    public function updateAddress(Request $request, $id)
+    {
+        $address = Address::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        $validator = validator($request->all(), [
+            'street'      => 'required|string',
+            'city'        => 'required|string',
+            'postal_code' => 'required|digits_between:4,5',
+            'country'     => 'required|string',
+            'state'       => 'nullable|string',
+        ], [
+            'street.required'            => __('app.street_required'),
+            'city.required'              => __('app.city_required'),
+            'postal_code.required'       => __('app.postal_code_required'),
+            'postal_code.digits_between' => __('app.postal_code_invalid'),
+            'country.required'           => __('app.country_required'),
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('active_tab', 'direcciones');
+        }
+
+        if ($request->is_default) {
+            Address::where('user_id', Auth::id())->update(['is_default' => false]);
+        }
+
+        $address->update([
+            'street'      => $request->street,
+            'city'        => $request->city,
+            'state'       => $request->state,
+            'postal_code' => $request->postal_code,
+            'country'     => $request->country,
+            'is_default'  => $request->boolean('is_default'),
+        ]);
+
+        return back()
+            ->with('mensaje', __('app.address_updated'))
+            ->with('active_tab', 'direcciones');
+    }
+
     public function storePaymentMethod(Request $request)
     {
         $request->validate([

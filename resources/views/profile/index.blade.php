@@ -105,21 +105,70 @@
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">{{ __('app.my_addresses') }}</h5>
                         @forelse($addresses as $address)
-                        <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-start">
-                            <div>
-                                @if($address->is_default)
-                                    <span class="badge mb-1 bg-brand">{{ __('app.default') }}</span><br>
-                                @endif
-                                <strong>{{ $address->street }}</strong><br>
-                                {{ $address->postal_code }} {{ $address->city }}
-                                @if($address->state), {{ $address->state }}@endif<br>
-                                {{ $address->country }}
+                        <div class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    @if($address->is_default)
+                                        <span class="badge mb-1 bg-brand">{{ __('app.default') }}</span><br>
+                                    @endif
+                                    <strong>{{ $address->street }}</strong><br>
+                                    {{ $address->postal_code }} {{ $address->city }}
+                                    @if($address->state), {{ $address->state }}@endif<br>
+                                    {{ $address->country }}
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#editAddress{{ $address->id }}"
+                                            aria-expanded="false"
+                                            aria-controls="editAddress{{ $address->id }}">
+                                        {{ __('app.edit') }}
+                                    </button>
+                                    <form action="{{ route('profile.destroyAddress', $address->id) }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ __('app.confirm_delete_address') }}')">{{ __('app.delete') }}</button>
+                                    </form>
+                                </div>
                             </div>
-                            <form action="{{ route('profile.destroyAddress', $address->id) }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ __('app.confirm_delete_address') }}')">{{ __('app.delete') }}</button>
-                            </form>
+
+                            <div class="collapse mt-3" id="editAddress{{ $address->id }}">
+                                <form action="{{ route('profile.updateAddress', $address->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ __('app.street') }}</label>
+                                        <input type="text" name="street" class="form-control" value="{{ old('street', $address->street) }}">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label class="form-label">{{ __('app.city') }}</label>
+                                            <input type="text" name="city" class="form-control" value="{{ old('city', $address->city) }}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label class="form-label">{{ __('app.postal_code') }}</label>
+                                            <input type="text" name="postal_code" class="form-control" value="{{ old('postal_code', $address->postal_code) }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label class="form-label">{{ __('app.state') }}</label>
+                                            <input type="text" name="state" class="form-control" value="{{ old('state', $address->state) }}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label class="form-label">{{ __('app.country') }}</label>
+                                            <input type="text" name="country" class="form-control" value="{{ old('country', $address->country) }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" name="is_default" class="form-check-input"
+                                               id="is_default_{{ $address->id }}"
+                                               {{ old('is_default', $address->is_default) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="is_default_{{ $address->id }}">{{ __('app.set_default') }}</label>
+                                    </div>
+                                    <button class="btn text-white bg-brand">{{ __('app.update') }}</button>
+                                </form>
+                            </div>
                         </div>
                         @empty
                             <p class="text-muted">{{ __('app.no_addresses') }}</p>
