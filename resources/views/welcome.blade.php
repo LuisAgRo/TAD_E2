@@ -21,15 +21,15 @@
         <a href="{{ route('products.index', ['category_id' => $cat->id]) }}" class="text-decoration-none">
             <div class="card text-center h-100 border-0 shadow-sm" style="transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
                 <div class="card-body py-4">
-                    <div class="mb-2 fs-1">
-                        @switch($cat->slug)
-                            @case('pintura') 🎨 @break
-                            @case('ceramica') 🏺 @break
-                            @case('ilustracion') ✏️ @break
-                            @case('escultura') 🗿 @break
-                            @default 🛍️
-                        @endswitch
-                    </div>
+                        <div class="mb-2 fs-1">
+                            @switch($cat->slug)
+                                @case('pintura') <i class="bi bi-brush" style="color:#C0392B;"></i> @break
+                                @case('ceramica') <i class="bi bi-cup-hot" style="color:#C0392B;"></i> @break
+                                @case('ilustracion') <i class="bi bi-pen" style="color:#C0392B;"></i> @break
+                                @case('escultura') <i class="bi bi-trophy" style="color:#C0392B;"></i> @break
+                                @default <i class="bi bi-bag" style="color:#C0392B;"></i>
+                            @endswitch
+                        </div>
                    <h5 class="card-title mb-1" style="color: #C0392B;">
                         {{ app()->getLocale() == 'en' ? ($cat->name_en ?? $cat->name) : $cat->name }}
                     </h5>
@@ -57,11 +57,13 @@
                 <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
             @else
                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <span class="text-muted fs-1">🖼️</span>
+                    <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
                 </div>
             @endif
             <div class="card-body">
-                <span class="badge mb-2" style="background-color: #C0392B;">{{ $product->category->name ?? 'Sin categoría' }}</span>
+                <span class="badge mb-2" style="background-color: #C0392B;">
+                    {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : ($product->category->name ?? __('app.no_category')) }}
+                </span>
                 <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">
                     <h5 class="card-title">{{ $product->name }}</h5>
                 </a>

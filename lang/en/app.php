@@ -61,7 +61,7 @@ return [
     'subtotal'         => 'Subtotal',
     'total'            => 'Total',
     'clear_cart'       => 'Clear cart',
-    'proceed_checkout' => 'Proceed to checkout →',
+    'proceed_checkout' => 'Check Order →',
 
     // Checkout
     'order_summary'    => 'Order summary',
@@ -122,7 +122,12 @@ return [
     'state'                  => 'State/Province',
     'country'                => 'Country',
     'set_default'            => 'Set as default address',
-    'payment_pending'        => 'Payment gateway integration is pending implementation.',
+    'payment_stripe_info' => 'Payments are securely processed through Stripe. We do not store your card details.',
+    'go_to_shop'          => 'Go to shop',
     'my_favorites' => 'My Favorites',
     'no_favorites' => 'You have nothing saved yet.',
+    'footer_tagline' => 'Handmade art',
+    'product_added_cart' => 'Product added to cart.',
+
+
 ];
