@@ -65,6 +65,10 @@ php artisan serve
 
 Accede en: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+### 11. Schedule
+Instalar schedule con composer require stripe/stripe-php
+Lanzar php artisan schedule:work junto a php artisan serve
+
 ## Configuración de email (Mailtrap)
 
 1. Crea cuenta en [mailtrap.io](https://mailtrap.io)
