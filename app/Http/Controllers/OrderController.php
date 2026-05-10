@@ -163,8 +163,11 @@ class OrderController extends Controller
     {
         $orderId = $request->query('order_id');
         if ($orderId) {
-            $order = Order::find($orderId);
+            $order = Order::with('items.product')->find($orderId);
             if ($order) {
+                foreach ($order->items as $item) {
+                    $item->product->increment('stock', $item->quantity);
+                }
                 $order->update(['status' => 'cancelled']);
             }
         }
