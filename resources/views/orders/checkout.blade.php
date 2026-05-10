@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<h2 class="mb-4">Resumen del pedido</h2>
+<h2 class="mb-4">{{ __('app.order_summary') }}</h2>
 
 <div class="row g-4">
     {{-- PRODUCTOS --}}
     <div class="col-md-7">
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Productos</h5>
+                <h5 class="fw-bold mb-3">{{ __('app.products') }}</h5>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-end">Subtotal</th>
+                            <th>{{ __('app.product') }}</th>
+                            <th class="text-center">{{ __('app.quantity') }}</th>
+                            <th class="text-end">{{ __('app.subtotal') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +28,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="2" class="text-end">Total</th>
+                            <th colspan="2" class="text-end">{{ __('app.total') }}</th>
                             <th class="text-end">{{ number_format($total, 2) }} €</th>
                         </tr>
                     </tfoot>
@@ -41,15 +41,15 @@
     <div class="col-md-5">
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Dirección de envío</h5>
+                <h5 class="fw-bold mb-3">{{ __('app.shipping_address') }}</h5>
 
                 <form action="{{ route('orders.store') }}" method="POST">
                     @csrf
 
                     @if($addresses->isEmpty())
                         <div class="alert alert-warning">
-                            No tienes direcciones guardadas.
-                            <a href="{{ route('profile.index') }}">Añade una aquí</a>
+                            {{ __('app.no_addresses') }}
+                            <a href="{{ route('profile.index') }}">{{ __('app.add_here') }}</a>
                         </div>
                     @else
                         @foreach($addresses as $address)
@@ -57,13 +57,13 @@
                             <input class="form-check-input" type="radio" name="address_id"
                                    value="{{ $address->id }}"
                                    id="address_{{ $address->id }}"
-                                    {{ $loop->first || $address->is_default ? 'checked' : '' }}>
+                                   {{ $loop->first || $address->is_default ? 'checked' : '' }}>
                             <label class="form-check-label" for="address_{{ $address->id }}">
                                 <strong>{{ $address->street }}</strong><br>
                                 {{ $address->postal_code }} {{ $address->city }}<br>
                                 {{ $address->country }}
                                 @if($address->is_default)
-                                    <span class="badge" style="background-color:#C0392B;">Principal</span>
+                                    <span class="badge" style="background-color:#C0392B;">{{ __('app.default') }}</span>
                                 @endif
                             </label>
                         </div>
@@ -76,12 +76,12 @@
                         <hr>
 
                         {{-- DIRECCIÓN DE FACTURACIÓN --}}
-                        <h5 class="fw-bold mb-3">Dirección de facturación</h5>
+                        <h5 class="fw-bold mb-3">{{ __('app.invoice_address') }}</h5>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" name="same_address" id="same_address" checked
                                 onchange="toggleInvoiceAddress()">
                             <label class="form-check-label" for="same_address">
-                                Misma que la dirección de envío
+                                {{ __('app.same_address') }}
                             </label>
                         </div>
 
@@ -110,20 +110,20 @@
                         </script>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-bold fs-5">Total:</span>
+                            <span class="fw-bold fs-5">{{ __('app.total') }}:</span>
                             <span class="fw-bold fs-5" style="color:#C0392B;">{{ number_format($total, 2) }} €</span>
                         </div>
 
                         <button type="submit" class="btn w-100 text-white fw-bold"
                                 style="background-color:#C0392B;"
-                                onclick="return confirm('¿Confirmar pedido?')">
-                            ✅ Confirmar pedido
+                                onclick="return confirm('{{ __('app.confirm_order_msg') }}')">
+                            {{ __('app.confirm_order') }}
                         </button>
                     @endif
                 </form>
 
                 <a href="{{ route('cart.index') }}" class="btn btn-outline-secondary w-100 mt-2">
-                    ← Volver al carrito
+                    {{ __('app.back_to_cart') }}
                 </a>
             </div>
         </div>

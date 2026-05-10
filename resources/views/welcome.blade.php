@@ -5,16 +5,16 @@
 {{-- HERO --}}
 <div class="py-5 mb-5 rounded-3 text-white text-center" style="background: linear-gradient(135deg, #C0392B, #922B21);">
     <div class="py-4">
-        <h1 class="display-4 fw-bold mb-3">Bienvenido a BermellónShop</h1>
-        <p class="lead mb-4">Arte hecho a mano. Piezas únicas de pintura, cerámica, ilustración y escultura.</p>
+        <h1 class="display-4 fw-bold mb-3">{{ __('app.welcome_title') }}</h1>
+        <p class="lead mb-4">{{ __('app.welcome_subtitle') }}</p>
         <a href="{{ route('products.index') }}" class="btn btn-light btn-lg fw-semibold px-5" style="color: #C0392B;">
-            Ver productos
+            {{ __('app.see_products') }}
         </a>
     </div>
 </div>
 
 {{-- CATEGORÍAS --}}
-<h2 class="mb-4">Explorar por categoría</h2>
+<h2 class="mb-4">{{ __('app.explore_category') }}</h2>
 <div class="row row-cols-2 row-cols-md-4 g-3 mb-5">
     @foreach($categories as $cat)
     <div class="col">
@@ -30,8 +30,12 @@
                             @default 🛍️
                         @endswitch
                     </div>
-                    <h5 class="card-title mb-1" style="color: #C0392B;">{{ $cat->name }}</h5>
-                    <p class="text-muted small mb-0">{{ $cat->description }}</p>
+                   <h5 class="card-title mb-1" style="color: #C0392B;">
+                        {{ app()->getLocale() == 'en' ? ($cat->name_en ?? $cat->name) : $cat->name }}
+                    </h5>
+                    <p class="text-muted small mb-0">
+                        {{ app()->getLocale() == 'en' ? ($cat->description_en ?? $cat->description) : $cat->description }}
+                    </p>
                 </div>
             </div>
         </a>
@@ -41,8 +45,8 @@
 
 {{-- PRODUCTOS DESTACADOS --}}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Últimos productos</h2>
-    <a href="{{ route('products.index') }}" class="btn btn-outline-danger btn-sm">Ver todos →</a>
+    <h2 class="mb-0">{{ __('app.latest_products') }}</h2>
+    <a href="{{ route('products.index') }}" class="btn btn-outline-danger btn-sm">{{ __('app.see_all') }}</a>
 </div>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -58,9 +62,9 @@
             @endif
             <div class="card-body">
                 <span class="badge mb-2" style="background-color: #C0392B;">{{ $product->category->name ?? 'Sin categoría' }}</span>
-               <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">
-    <h5 class="card-title">{{ $product->name }}</h5>
-</a>
+                <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">
+                    <h5 class="card-title">{{ $product->name }}</h5>
+                </a>
                 <p class="card-text text-muted small">{{ Str::limit($product->description, 70) }}</p>
                 <div class="fw-bold fs-5" style="color: #C0392B;">{{ number_format($product->price, 2) }} €</div>
             </div>
@@ -69,20 +73,20 @@
                     @auth
                         <form action="{{ route('cart.items.store', $product->id) }}" method="POST">
                             @csrf
-                            <button class="btn w-100 text-white" style="background-color: #C0392B;" type="submit">Añadir al carrito</button>
+                            <button class="btn w-100 text-white" style="background-color: #C0392B;" type="submit">{{ __('app.add_to_cart') }}</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="btn w-100 text-white" style="background-color: #C0392B;">Inicia sesion para comprar</a>
+                        <a href="{{ route('login') }}" class="btn w-100 text-white" style="background-color: #C0392B;">{{ __('app.login_to_buy') }}</a>
                     @endauth
                 @else
-                    <button class="btn btn-secondary w-100" disabled>Sin stock</button>
+                    <button class="btn btn-secondary w-100" disabled>{{ __('app.no_stock') }}</button>
                 @endif
             </div>
         </div>
     </div>
     @empty
         <div class="col-12">
-            <p class="text-muted">Aún no hay productos disponibles.</p>
+            <p class="text-muted">{{ __('app.no_products') }}</p>
         </div>
     @endforelse
 </div>

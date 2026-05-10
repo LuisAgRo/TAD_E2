@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4 fw-bold">Mis Favoritos <span style="color: #C0392B;">❤️</span></h2>
+    <h2 class="mb-4 fw-bold">{{ __('app.my_favorites') }} <span style="color: #C0392B;">❤️</span></h2>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @forelse($favoriteItems as $item)
-            @php $product = $item->product; @endphp {{-- Accedemos al producto desde el item de la lista --}}
-            
+            @php $product = $item->product; @endphp
+
             <div class="col">
                 <div class="card h-100 shadow-sm border-0">
                     @if($product->image)
@@ -16,7 +16,7 @@
 
                     <div class="card-body">
                         <span class="badge mb-2" style="background-color: #C0392B;">
-                            {{ $product->category->name ?? 'Sin categoría' }}
+                            {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : ($product->category->name ?? __('app.no_category')) }}
                         </span>
                         <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">
                             <h5 class="card-title">{{ $product->name }}</h5>
@@ -29,7 +29,7 @@
                         <form action="{{ route('cart.items.store', $product->id) }}" method="POST">
                             @csrf
                             <button class="btn w-100 text-white" style="background-color: #C0392B;" type="submit">
-                                Añadir al carrito
+                                {{ __('app.add_to_cart') }}
                             </button>
                         </form>
                     </div>
@@ -37,8 +37,8 @@
             </div>
         @empty
             <div class="col-12 text-center py-5">
-                <p class="text-muted">No tienes nada guardado aún.</p>
-                <a href="{{ route('products.index') }}" class="btn text-white" style="background-color: #C0392B;">Ver productos</a>
+                <p class="text-muted">{{ __('app.no_favorites') }}</p>
+                <a href="{{ route('products.index') }}" class="btn text-white" style="background-color: #C0392B;">{{ __('app.see_products') }}</a>
             </div>
         @endforelse
     </div>
