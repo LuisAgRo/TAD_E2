@@ -51,7 +51,7 @@
         <label class="form-label">Imagen</label>
         @if($product->image)
             <div class="mb-2">
-                <img src="{{ asset('storage/' . $product->image) }}" style="height: 120px; object-fit: cover; border-radius: 8px;">
+                <img src="{{ asset('storage/' . $product->image) }}" class="product-edit-preview">
                 <div class="form-text">Imagen actual. Sube una nueva para reemplazarla.</div>
             </div>
         @endif

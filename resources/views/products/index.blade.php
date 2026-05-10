@@ -34,9 +34,9 @@
     <div class="col">
         <div class="card h-100 shadow-sm">
             @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image">
             @else
-                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center product-image-placeholder">
                     <span class="text-white">{{ __('app.no_image') }}</span>
                 </div>
             @endif
@@ -46,7 +46,7 @@
                     <h5 class="card-title">{{ $product->name }}</h5>
                 </a>
                 <p class="card-text text-muted small">{{ Str::limit($product->description, 80) }}</p>
-                <span class="badge mb-2" style="background-color: #C0392B;">
+                <span class="badge mb-2 bg-brand">
                     {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : $product->category->name }}
                 </span>
                 <div class="d-flex justify-content-between align-items-center mt-2">
@@ -71,12 +71,12 @@
                         @auth
                             <form action="{{ route('cart.items.store', $product->id) }}" method="POST">
                                 @csrf
-                                <button class="btn w-100 text-white" style="background-color: #C0392B;" type="submit">
+                            <button class="btn w-100 text-white bg-brand" type="submit">
                                     {{ __('app.add_to_cart') }}
                                 </button>
                             </form>
                         @else
-                            <a href="{{ route('login') }}" class="btn w-100 text-white" style="background-color: #C0392B;">
+                        <a href="{{ route('login') }}" class="btn w-100 text-white bg-brand">
                                 {{ __('app.login_to_buy') }}
                             </a>
                         @endauth

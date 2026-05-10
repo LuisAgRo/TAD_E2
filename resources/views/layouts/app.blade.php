@@ -11,7 +11,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <div id="app" class="d-flex flex-column flex-grow-1">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #C0392B;">
+        <nav class="navbar navbar-expand-md shadow-sm bg-brand">
             <div class="container">
                 <a class="navbar-brand text-white fw-bold" href="{{ url('/') }}">
                     BermellonShop
@@ -108,7 +108,7 @@
             @yield('content')
         </main>
     </div>
-    <footer class="mt-5 py-4 text-white text-center" style="background-color: #C0392B;">
+    <footer class="mt-5 py-4 text-white text-center bg-brand">
     <div class="container">
         <p class="mb-1 fw-semibold fs-5">
             <i class="bi bi-palette-fill"></i> BermellónShop

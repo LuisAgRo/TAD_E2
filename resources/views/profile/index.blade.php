@@ -6,8 +6,7 @@
     <div class="col-md-3">
         <div class="card shadow-sm border-0 mb-3">
             <div class="card-body text-center py-4">
-                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                     style="width:80px;height:80px;background-color:#C0392B;">
+                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 profile-avatar">
                     <span class="text-white fw-bold fs-3">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                 </div>
                 <h6 class="fw-bold mb-0">{{ auth()->user()->name }}</h6>
@@ -15,28 +14,23 @@
             </div>
         </div>
         <div class="list-group shadow-sm">
-            <a href="#datos" class="list-group-item list-group-item-action {{ session('active_tab', 'datos') == 'datos' ? 'active' : '' }}"
-               style="{{ session('active_tab', 'datos') == 'datos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
+            <a href="#datos" class="list-group-item list-group-item-action profile-tab {{ session('active_tab', 'datos') == 'datos' ? 'active' : '' }}"
                data-bs-toggle="list">
                 👤 {{ __('app.profile_title') }}
             </a>
-            <a href="#password" class="list-group-item list-group-item-action {{ session('active_tab') == 'password' ? 'active' : '' }}"
-               style="{{ session('active_tab') == 'password' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
+            <a href="#password" class="list-group-item list-group-item-action profile-tab {{ session('active_tab') == 'password' ? 'active' : '' }}"
                data-bs-toggle="list">
                 🔑 {{ __('app.change_password') }}
             </a>
-            <a href="#direcciones" class="list-group-item list-group-item-action {{ session('active_tab') == 'direcciones' ? 'active' : '' }}"
-               style="{{ session('active_tab') == 'direcciones' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
+            <a href="#direcciones" class="list-group-item list-group-item-action profile-tab {{ session('active_tab') == 'direcciones' ? 'active' : '' }}"
                data-bs-toggle="list">
                 📍 {{ __('app.addresses') }}
             </a>
-            <a href="#pagos" class="list-group-item list-group-item-action {{ session('active_tab') == 'pagos' ? 'active' : '' }}"
-               style="{{ session('active_tab') == 'pagos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
+            <a href="#pagos" class="list-group-item list-group-item-action profile-tab {{ session('active_tab') == 'pagos' ? 'active' : '' }}"
                data-bs-toggle="list">
                 💳 {{ __('app.payment_methods') }}
             </a>
-            <a href="#pedidos" class="list-group-item list-group-item-action {{ session('active_tab') == 'pedidos' ? 'active' : '' }}"
-               style="{{ session('active_tab') == 'pedidos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
+            <a href="#pedidos" class="list-group-item list-group-item-action profile-tab {{ session('active_tab') == 'pedidos' ? 'active' : '' }}"
                data-bs-toggle="list">
                 📦 {{ __('app.my_orders_title') }}
             </a>
@@ -68,7 +62,7 @@
                                 <label class="form-label">{{ __('app.email') }}</label>
                                 <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}">
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.save_changes') }}</button>
+                            <button class="btn text-white bg-brand">{{ __('app.save_changes') }}</button>
                         </form>
                     </div>
                 </div>
@@ -99,7 +93,7 @@
                                 <label class="form-label">{{ __('app.confirm_password') }}</label>
                                 <input type="password" name="password_confirmation" class="form-control">
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.update_password') }}</button>
+                            <button class="btn text-white bg-brand">{{ __('app.update_password') }}</button>
                         </form>
                     </div>
                 </div>
@@ -114,7 +108,7 @@
                         <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-start">
                             <div>
                                 @if($address->is_default)
-                                    <span class="badge mb-1" style="background-color:#C0392B;">{{ __('app.default') }}</span><br>
+                                    <span class="badge mb-1 bg-brand">{{ __('app.default') }}</span><br>
                                 @endif
                                 <strong>{{ $address->street }}</strong><br>
                                 {{ $address->postal_code }} {{ $address->city }}
@@ -174,7 +168,7 @@
                                 <input type="checkbox" name="is_default" class="form-check-input" id="is_default">
                                 <label class="form-check-label" for="is_default">{{ __('app.set_default') }}</label>
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.add_address') }}</button>
+                            <button class="btn text-white bg-brand">{{ __('app.add_address') }}</button>
                         </form>
                     </div>
                 </div>
@@ -189,7 +183,7 @@
                             <i class="bi bi-credit-card fs-5"></i>
                             <span>{{ __('app.payment_stripe_info') }}</span>
                         </div>
-                        <a href="{{ route('orders.checkout') }}" class="btn text-white" style="background-color:#C0392B;">
+                        <a href="{{ route('orders.checkout') }}" class="btn text-white bg-brand">
                             <i class="bi bi-bag"></i> {{ __('app.go_to_shop') }}
                         </a>
                     </div>

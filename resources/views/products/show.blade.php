@@ -3,8 +3,8 @@
 @section('content')
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('home') }}" style="color:#C0392B;">{{ __('app.home') }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('products.index') }}" style="color:#C0392B;">{{ __('app.products') }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-brand">{{ __('app.home') }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('products.index') }}" class="text-brand">{{ __('app.products') }}</a></li>
         <li class="breadcrumb-item active">{{ $product->name }}</li>
     </ol>
 </nav>
@@ -14,19 +14,17 @@
     <div class="col-md-6">
         @if($product->image)
             <img src="{{ asset('storage/' . $product->image) }}"
-                 class="img-fluid rounded shadow"
-                 style="width: 100%; max-height: 450px; object-fit: cover;">
+                 class="img-fluid rounded shadow product-show-image">
         @else
-            <div class="bg-light rounded d-flex align-items-center justify-content-center shadow"
-                 style="height: 450px;">
-                <span class="text-muted" style="font-size: 5rem;">🖼️</span>
+            <div class="bg-light rounded d-flex align-items-center justify-content-center shadow product-show-placeholder">
+                <span class="text-muted product-show-icon">🖼️</span>
             </div>
         @endif
     </div>
 
     {{-- Info --}}
     <div class="col-md-6">
-        <span class="badge mb-3" style="background-color:#C0392B; font-size: 0.85rem;">
+        <span class="badge mb-3 bg-brand product-badge">
             {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : ($product->category->name ?? __('app.no_category')) }}
         </span>
 
@@ -34,7 +32,7 @@
             @auth
                 <form action="{{ route('favorites.toggle', $product->id) }}" method="POST" class="me-2">
                     @csrf
-                    <button type="submit" class="btn p-0 border-0 bg-transparent" style="font-size: 1.5rem; line-height: 1;">
+                    <button type="submit" class="btn p-0 border-0 bg-transparent favorite-toggle">
                         @if(auth()->user()->favoriteLists()->where('product_id', $product->id)->exists())
                             <span title="{{ __('app.remove_favorite') }}">❤️</span>
                         @else
@@ -43,7 +41,7 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="text-decoration-none me-2" style="font-size: 1.5rem; line-height: 1;">
+                <a href="{{ route('login') }}" class="text-decoration-none me-2 favorite-toggle">
                     🤍
                 </a>
             @endauth
@@ -54,7 +52,7 @@
         <p class="text-muted mb-4">{{ $product->description }}</p>
 
         <div class="mb-4">
-            <span class="fs-2 fw-bold" style="color:#C0392B;">
+            <span class="fs-2 fw-bold text-brand">
                 {{ number_format($product->price, 2) }} €
             </span>
         </div>
@@ -76,12 +74,12 @@
                         <input id="quantity" type="number" name="quantity" class="form-control"
                                min="1" max="{{ $product->stock }}" value="{{ old('quantity', 1) }}">
                     </div>
-                    <button class="btn btn-lg w-100 text-white" style="background-color:#C0392B;" type="submit">
+                    <button class="btn btn-lg w-100 text-white bg-brand" type="submit">
                         {{ __('app.add_to_cart') }}
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="btn btn-lg w-100 text-white mb-3" style="background-color:#C0392B;">
+                <a href="{{ route('login') }}" class="btn btn-lg w-100 text-white mb-3 bg-brand">
                     {{ __('app.login_to_buy') }}
                 </a>
             @endauth

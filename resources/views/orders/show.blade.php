@@ -35,7 +35,7 @@
                     <tfoot>
                         <tr>
                             <th colspan="3" class="text-end">{{ __('app.total') }}</th>
-                            <th class="text-end" style="color:#C0392B;">{{ number_format($order->total_amount, 2) }} €</th>
+                            <th class="text-end text-brand">{{ number_format($order->total_amount, 2) }} €</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -102,7 +102,7 @@
                     <option value="delivered"  {{ $order->status == 'delivered'  ? 'selected' : '' }}>{{ __('app.delivered') }}</option>
                     <option value="cancelled"  {{ $order->status == 'cancelled'  ? 'selected' : '' }}>{{ __('app.cancelled') }}</option>
                 </select>
-                <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.update') }}</button>
+                <button class="btn text-white bg-brand">{{ __('app.update') }}</button>
             </div>
         </form>
     </div>

@@ -85,9 +85,6 @@ Route::middleware('auth')->group(function () {
     // Esta ruta servirá para añadir o quitar productos de la lista
     Route::post('/favoritos/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 
-    // Añadir o quitar productos de la lista de favoritos
-    Route::post('/favoritos/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
-
 });
 
 

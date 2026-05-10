@@ -24,7 +24,7 @@
                 <tr>
                     <th>{{ __('app.product') }}</th>
                     <th class="text-end">{{ __('app.price') }}</th>
-                    <th style="width: 180px;">{{ __('app.quantity') }}</th>
+                    <th class="cart-quantity-col">{{ __('app.quantity') }}</th>
                     <th class="text-end">{{ __('app.subtotal') }}</th>
                     <th></th>
                 </tr>
@@ -70,8 +70,7 @@
 
     <div class="d-flex justify-content-end mt-3">
 
-                <a href="{{ route('orders.checkout') }}" class="btn btn-lg text-white fw-bold px-5"
-   style="background-color:#C0392B;">
+                <a href="{{ route('orders.checkout') }}" class="btn btn-lg text-white fw-bold px-5 bg-brand">
     {{ __('app.proceed_checkout') }}
 </a>
             </button>

@@ -63,7 +63,7 @@
                                 {{ $address->postal_code }} {{ $address->city }}<br>
                                 {{ $address->country }}
                                 @if($address->is_default)
-                                    <span class="badge" style="background-color:#C0392B;">{{ __('app.default') }}</span>
+                                    <span class="badge bg-brand">{{ __('app.default') }}</span>
                                 @endif
                             </label>
                         </div>
@@ -85,7 +85,7 @@
                             </label>
                         </div>
 
-                        <div id="invoice_address_section" style="display:none;">
+                        <div id="invoice_address_section" class="invoice-address-section">
                             @foreach($addresses as $address)
                             <div class="form-check border rounded p-3 mb-2">
                                 <input class="form-check-input" type="radio" name="invoice_address_id"
@@ -121,11 +121,10 @@
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-bold fs-5">{{ __('app.total') }}:</span>
-                            <span class="fw-bold fs-5" style="color:#C0392B;">{{ number_format($total, 2) }} €</span>
+                            <span class="fw-bold fs-5 text-brand">{{ number_format($total, 2) }} €</span>
                         </div>
 
-                        <button type="submit" class="btn w-100 text-white fw-bold"
-                                style="background-color:#C0392B;"
+                        <button type="submit" class="btn w-100 text-white fw-bold bg-brand"
                                 onclick="return confirm('{{ __('app.confirm_order_msg') }}')">
                             {{ __('app.confirm_order') }}
                         </button>
@@ -143,7 +142,7 @@
 <div class="modal fade" id="modalAddAddress" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:#C0392B;">
+            <div class="modal-header bg-brand">
                 <h5 class="modal-title text-white"><i class="bi bi-plus-circle"></i> {{ __('app.add_address') }}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -179,7 +178,7 @@
                         <input type="checkbox" name="is_default" class="form-check-input" id="modal_is_default">
                         <label class="form-check-label" for="modal_is_default">{{ __('app.set_default') }}</label>
                     </div>
-                    <button type="submit" class="btn w-100 text-white" style="background-color:#C0392B;">
+                    <button type="submit" class="btn w-100 text-white bg-brand">
                         {{ __('app.add_address') }}
                     </button>
                 </form>

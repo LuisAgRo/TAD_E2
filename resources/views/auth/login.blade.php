@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-header text-white text-center" style="background-color: #C0392B;">
+                <div class="card-header text-white text-center bg-brand">
                     <h5 class="mb-0">{{ __('Login') }}</h5>
                 </div>
                 <div class="card-body">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn text-white" style="background-color: #C0392B;">
+                                <button type="submit" class="btn text-white bg-brand">
                                     {{ __('Login') }}
                                 </button>
                                 @if (Route::has('password.request'))

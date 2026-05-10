@@ -9,3 +9,93 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+:root {
+    --brand: #c0392b;
+    --brand-dark: #922b21;
+}
+
+.bg-brand {
+    background-color: var(--brand) !important;
+}
+
+.text-brand {
+    color: var(--brand) !important;
+}
+
+.hero-banner {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+}
+
+.hover-lift {
+    transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-image-placeholder {
+    height: 200px;
+}
+
+.image-icon {
+    font-size: 4rem;
+}
+
+.product-show-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+}
+
+.product-show-placeholder {
+    height: 450px;
+}
+
+.product-show-icon {
+    font-size: 5rem;
+}
+
+.product-badge {
+    font-size: 0.85rem;
+}
+
+.favorite-toggle {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.product-edit-preview {
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-quantity-col {
+    width: 180px;
+}
+
+.invoice-address-section {
+    display: none;
+}
+
+.checkout-success-icon {
+    font-size: 5rem;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: var(--brand);
+}
+
+.profile-tab.active {
+    background-color: var(--brand) !important;
+    border-color: var(--brand) !important;
+}
