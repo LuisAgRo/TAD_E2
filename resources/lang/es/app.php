@@ -141,6 +141,8 @@ return [
     'address_deleted'     => 'Dirección eliminada correctamente',
     'payment_added'       => 'Método de pago añadido',
     'payment_deleted'     => 'Método de pago eliminado',
+    'pending_payment_msg' => 'Tu pedido está pendiente de pago. ¿Quieres completar el pago?',
+    'retry_payment'       => 'Completar pago',
 
 
 ];

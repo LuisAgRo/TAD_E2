@@ -32,20 +32,20 @@ class OrderController extends Controller
 
     // POST /orders — crear pedido y redirigir a Stripe
     public function store(Request $request)
-    {
-        $request->validate([
-            'address_id' => 'required|exists:addresses,id',
-        ]);
+{
+    $request->validate([
+        'address_id' => 'required|exists:addresses,id',
+    ]);
 
-        $user = Auth::user();
-        $items = $user->cartItems()->with('product')->get();
+    $user = Auth::user();
+    $items = $user->cartItems()->with('product')->get();
 
-        if ($items->isEmpty()) {
-            return redirect()->route('cart.index')
-                ->with('error', 'Tu carrito está vacío.');
-        }
+    if ($items->isEmpty()) {
+        return redirect()->route('cart.index')
+            ->with('error', 'Tu carrito está vacío.');
+    }
 
-        $order = null;
+    $order = null;
 
         try {
             DB::beginTransaction();
@@ -81,10 +81,7 @@ class OrderController extends Controller
                     'unit_price' => $item->product->price,
                     'subtotal'   => $item->product->price * $item->quantity,
                 ]);
-                $item->product->decrement('stock', $item->quantity);
             }
-
-            $user->cartItems()->delete();
 
             DB::commit();
 
@@ -144,11 +141,19 @@ class OrderController extends Controller
             }
 
             // Actualizar estado del pedido
-            $order = Order::with('items.product', 'user')->findOrFail($orderId);
-            $order->update(['status' => 'processing']);
+           $order = Order::with('items.product', 'user')->findOrFail($orderId);
 
-            // Enviar email de confirmación
+        if ($order->status === 'pending') {
+            DB::transaction(function () use ($order) {
+                foreach ($order->items as $item) {
+                    $item->product->decrement('stock', $item->quantity);
+                }
+                $order->user->cartItems()->delete();
+                $order->update(['status' => 'processing']);
+            });
+
             Mail::to($order->user->email)->send(new OrderConfirmation($order));
+        }
 
         } catch (\Exception $e) {
             return redirect()->route('orders.index')
@@ -173,6 +178,45 @@ class OrderController extends Controller
         }
         return view('orders.checkout_cancel');
     }
+
+    public function retry($id)
+{
+    $order = Order::with('items.product')->where('user_id', Auth::id())->findOrFail($id);
+
+    if ($order->status !== 'pending') {
+        return redirect()->route('orders.show', $id)
+            ->with('error', 'Este pedido ya no puede reintentarse.');
+    }
+
+    try {
+        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+
+        $lineItems = [];
+        foreach ($order->items as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency'     => 'eur',
+                    'product_data' => ['name' => $item->product->name],
+                    'unit_amount'  => (int)($item->unit_price * 100),
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
+        $checkout_session = $stripe->checkout->sessions->create([
+            'line_items'  => $lineItems,
+            'mode'        => 'payment',
+            'success_url' => route('orders.checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}&order_id=' . $order->id,
+            'cancel_url'  => route('orders.checkout.cancel', [], true) . '?order_id=' . $order->id,
+        ]);
+
+        return redirect($checkout_session->url);
+
+    } catch (\Exception $e) {
+        return redirect()->route('orders.show', $id)
+            ->with('error', 'Error al procesar el pago.');
+    }
+}
 
     public function index()
     {
