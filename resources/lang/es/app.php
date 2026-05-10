@@ -144,6 +144,9 @@ return [
     'payment_deleted'     => 'Método de pago eliminado',
     'pending_payment_msg' => 'Tu pedido está pendiente de pago. ¿Quieres completar el pago?',
     'retry_payment'       => 'Completar pago',
-
+    'reset_password_title'   => 'Restablecer Contraseña',
+    'reset_password_inst'    => 'Indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecerla.',
+    'send_password_link'     => 'Enviar enlace al correo',
+    'email_address'          => 'Correo Electrónico',
 
 ];
