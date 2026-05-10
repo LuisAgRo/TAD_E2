@@ -17,27 +17,25 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @if(auth()->check() && auth()->user()->role_id === 1)
 
-                <a class="nav-link text-white" href="{{ route('categories.index') }}">Categorías</a>
+                @if(auth()->check() && auth()->user()->role_id === 1)
+                    <a class="nav-link text-white" href="{{ route('categories.index') }}">{{ __('app.categories') }}</a>
                 @endif
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('products.index') }}">Productos</a>
+                            <a class="nav-link text-white" href="{{ route('products.index') }}">{{ __('app.products') }}</a>
                         </li>
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="{{ route('cart.index') }}">
-                                    Carrito ({{ auth()->user()->cartItems()->sum('quantity') }})
+                                    {{ __('app.cart') }} ({{ auth()->user()->cartItems()->sum('quantity') }})
                                 </a>
                             </li>
-                        @endauth
-                        @auth
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="{{ route('favorites.index') }}">
-                                    Favoritos
+                                    {{ __('app.favorites') }}
                                     <span class="badge rounded-pill bg-white text-danger">
                                         {{ auth()->user()->favoriteLists->count() }}
                                     </span>
@@ -46,13 +44,26 @@
                         @endauth
                     </ul>
                     <ul class="navbar-nav ms-auto">
+
+                        {{-- Selector de idioma --}}
+                        <li class="nav-item d-flex gap-2 align-items-center me-2">
+                            <a href="{{ route('lang.switch', 'es') }}"
+                               class="btn btn-sm {{ app()->getLocale() == 'es' ? 'btn-light' : 'btn-outline-light' }}">
+                                ES
+                            </a>
+                            <a href="{{ route('lang.switch', 'en') }}"
+                               class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-light' : 'btn-outline-light' }}">
+                                EN
+                            </a>
+                        </li>
+
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="{{ route('login') }}">Login</a>
+                                <a class="nav-link text-white" href="{{ route('login') }}">{{ __('app.login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{ route('register') }}">Registro</a>
+                                    <a class="nav-link text-white" href="{{ route('register') }}">{{ __('app.register') }}</a>
                                 </li>
                             @endif
                         @else
@@ -61,17 +72,17 @@
                                     {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="{{ route('profile.index') }}">Mi perfil</a></li>
-                                        @if(auth()->check() && auth()->user()->role_id === 1)
-                                            <li><a class="dropdown-item" href="{{ route('admin.orders') }}">Pedidos de usuarios</a></li>
-                                        @else
-                                            <li><a class="dropdown-item" href="{{ route('orders.index') }}">Mis pedidos</a></li>
-                                        @endif
-                                        <li><hr class="dropdown-divider"></li>
-
+                                    <li><a class="dropdown-item" href="{{ route('profile.index') }}">{{ __('app.my_profile') }}</a></li>
+                                    @if(auth()->check() && auth()->user()->role_id === 1)
+                                        <li><a class="dropdown-item" href="{{ route('admin.orders') }}">{{ __('app.manage_orders') }}</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{ route('orders.index') }}">{{ __('app.my_orders') }}</a></li>
+                                    @endif
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            Cerrar sesión
+                                            {{ __('app.logout') }}
                                         </a>
                                     </li>
                                 </ul>

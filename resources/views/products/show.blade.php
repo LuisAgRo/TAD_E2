@@ -3,8 +3,8 @@
 @section('content')
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('home') }}" style="color:#C0392B;">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('products.index') }}" style="color:#C0392B;">Productos</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('home') }}" style="color:#C0392B;">{{ __('app.home') }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('products.index') }}" style="color:#C0392B;">{{ __('app.products') }}</a></li>
         <li class="breadcrumb-item active">{{ $product->name }}</li>
     </ol>
 </nav>
@@ -24,27 +24,26 @@
         @endif
     </div>
 
-{{-- Info --}}
+    {{-- Info --}}
     <div class="col-md-6">
         <span class="badge mb-3" style="background-color:#C0392B; font-size: 0.85rem;">
-            {{ $product->category->name ?? 'Sin categoría' }}
+            {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : ($product->category->name ?? __('app.no_category')) }}
         </span>
 
         <div class="d-flex align-items-center mb-2">
-            {{-- Botón de Favoritos --}}
             @auth
                 <form action="{{ route('favorites.toggle', $product->id) }}" method="POST" class="me-2">
                     @csrf
                     <button type="submit" class="btn p-0 border-0 bg-transparent" style="font-size: 1.5rem; line-height: 1;">
                         @if(auth()->user()->favoriteLists()->where('product_id', $product->id)->exists())
-                            <span title="Quitar de favoritos">❤️</span>
+                            <span title="{{ __('app.remove_favorite') }}">❤️</span>
                         @else
-                            <span title="Añadir a favoritos">🤍</span>
+                            <span title="{{ __('app.add_favorite') }}">🤍</span>
                         @endif
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="text-decoration-none me-2" style="font-size: 1.5rem; line-height: 1;" title="Inicia sesión para añadir a favoritos">
+                <a href="{{ route('login') }}" class="text-decoration-none me-2" style="font-size: 1.5rem; line-height: 1;">
                     🤍
                 </a>
             @endauth
@@ -62,9 +61,9 @@
 
         <div class="mb-4">
             @if($product->stock > 0)
-                <span class="text-success fw-semibold">✔ En stock ({{ $product->stock }} disponibles)</span>
+                <span class="text-success fw-semibold">✔ {{ __('app.in_stock') }} ({{ $product->stock }} {{ __('app.available') }})</span>
             @else
-                <span class="text-danger fw-semibold">✘ Sin stock</span>
+                <span class="text-danger fw-semibold">✘ {{ __('app.out_of_stock') }}</span>
             @endif
         </div>
 
@@ -73,42 +72,35 @@
                 <form action="{{ route('cart.items.store', $product->id) }}" method="POST" class="mb-3">
                     @csrf
                     <div class="mb-3">
-                        <label for="quantity" class="form-label">Cantidad</label>
-                        <input
-                            id="quantity"
-                            type="number"
-                            name="quantity"
-                            class="form-control"
-                            min="1"
-                            max="{{ $product->stock }}"
-                            value="{{ old('quantity', 1) }}"
-                        >
+                        <label for="quantity" class="form-label">{{ __('app.quantity') }}</label>
+                        <input id="quantity" type="number" name="quantity" class="form-control"
+                               min="1" max="{{ $product->stock }}" value="{{ old('quantity', 1) }}">
                     </div>
                     <button class="btn btn-lg w-100 text-white" style="background-color:#C0392B;" type="submit">
-                        Añadir al carrito
+                        {{ __('app.add_to_cart') }}
                     </button>
                 </form>
             @else
                 <a href="{{ route('login') }}" class="btn btn-lg w-100 text-white mb-3" style="background-color:#C0392B;">
-                    Inicia sesion para comprar
+                    {{ __('app.login_to_buy') }}
                 </a>
             @endauth
         @else
-            <button class="btn btn-lg w-100 btn-secondary mb-3" disabled>Sin stock</button>
+            <button class="btn btn-lg w-100 btn-secondary mb-3" disabled>{{ __('app.no_stock') }}</button>
         @endif
 
         <a href="{{ route('products.index') }}" class="btn btn-outline-secondary w-100">
-            ← Volver a productos
+            {{ __('app.back_to_products') }}
         </a>
 
         @if(auth()->check() && auth()->user()->role_id === 1)
             <hr>
             <div class="d-flex gap-2 mt-2">
-                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning flex-fill">Editar</a>
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning flex-fill">{{ __('app.edit') }}</a>
                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="flex-fill">
                     @method('DELETE')
                     @csrf
-                    <button class="btn btn-danger w-100" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
+                    <button class="btn btn-danger w-100" onclick="return confirm('¿{{ __('app.delete') }} producto?')">{{ __('app.delete') }}</button>
                 </form>
             </div>
         @endif

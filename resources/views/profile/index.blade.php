@@ -18,32 +18,32 @@
             <a href="#datos" class="list-group-item list-group-item-action {{ session('active_tab', 'datos') == 'datos' ? 'active' : '' }}"
                style="{{ session('active_tab', 'datos') == 'datos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
                data-bs-toggle="list">
-                👤 Datos personales
+                👤 {{ __('app.profile_title') }}
             </a>
             <a href="#password" class="list-group-item list-group-item-action {{ session('active_tab') == 'password' ? 'active' : '' }}"
                style="{{ session('active_tab') == 'password' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
                data-bs-toggle="list">
-                🔑 Cambiar contraseña
+                🔑 {{ __('app.change_password') }}
             </a>
             <a href="#direcciones" class="list-group-item list-group-item-action {{ session('active_tab') == 'direcciones' ? 'active' : '' }}"
                style="{{ session('active_tab') == 'direcciones' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
                data-bs-toggle="list">
-                📍 Direcciones
+                📍 {{ __('app.addresses') }}
             </a>
             <a href="#pagos" class="list-group-item list-group-item-action {{ session('active_tab') == 'pagos' ? 'active' : '' }}"
                style="{{ session('active_tab') == 'pagos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
                data-bs-toggle="list">
-                💳 Métodos de pago
+                💳 {{ __('app.payment_methods') }}
             </a>
             <a href="#pedidos" class="list-group-item list-group-item-action {{ session('active_tab') == 'pedidos' ? 'active' : '' }}"
                style="{{ session('active_tab') == 'pedidos' ? 'background-color:#C0392B;border-color:#C0392B;' : '' }}"
                data-bs-toggle="list">
-                📦 Mis pedidos
+                📦 {{ __('app.my_orders_title') }}
             </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button class="list-group-item list-group-item-action text-danger w-100 text-start">
-                    🚪 Cerrar sesión
+                    🚪 {{ __('app.logout') }}
                 </button>
             </form>
         </div>
@@ -57,18 +57,18 @@
             <div class="tab-pane fade {{ session('active_tab', 'datos') == 'datos' ? 'show active' : '' }}" id="datos">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4">Datos personales</h5>
+                        <h5 class="fw-bold mb-4">{{ __('app.profile_title') }}</h5>
                         <form action="{{ route('profile.updateInfo') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Nombre</label>
+                                <label class="form-label">{{ __('app.name') }}</label>
                                 <input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">{{ __('app.email') }}</label>
                                 <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}">
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">Guardar cambios</button>
+                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.save_changes') }}</button>
                         </form>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
             <div class="tab-pane fade {{ session('active_tab') == 'password' ? 'show active' : '' }}" id="password">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4">Cambiar contraseña</h5>
+                        <h5 class="fw-bold mb-4">{{ __('app.change_password') }}</h5>
                         <form action="{{ route('profile.updatePassword') }}" method="POST">
                             @csrf
                             @error('current_password')
@@ -88,18 +88,18 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                             <div class="mb-3">
-                                <label class="form-label">Contraseña actual</label>
+                                <label class="form-label">{{ __('app.current_password') }}</label>
                                 <input type="password" name="current_password" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Nueva contraseña</label>
+                                <label class="form-label">{{ __('app.new_password') }}</label>
                                 <input type="password" name="password" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirmar nueva contraseña</label>
+                                <label class="form-label">{{ __('app.confirm_password') }}</label>
                                 <input type="password" name="password_confirmation" class="form-control">
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">Actualizar contraseña</button>
+                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.update_password') }}</button>
                         </form>
                     </div>
                 </div>
@@ -109,12 +109,12 @@
             <div class="tab-pane fade {{ session('active_tab') == 'direcciones' ? 'show active' : '' }}" id="direcciones">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4">Mis direcciones</h5>
+                        <h5 class="fw-bold mb-4">{{ __('app.my_addresses') }}</h5>
                         @forelse($addresses as $address)
                         <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-start">
                             <div>
                                 @if($address->is_default)
-                                    <span class="badge mb-1" style="background-color:#C0392B;">Principal</span><br>
+                                    <span class="badge mb-1" style="background-color:#C0392B;">{{ __('app.default') }}</span><br>
                                 @endif
                                 <strong>{{ $address->street }}</strong><br>
                                 {{ $address->postal_code }} {{ $address->city }}
@@ -124,15 +124,14 @@
                             <form action="{{ route('profile.destroyAddress', $address->id) }}" method="POST">
                                 @method('DELETE')
                                 @csrf
-                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar dirección?')">Eliminar</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ __('app.confirm_delete_address') }}')">{{ __('app.delete') }}</button>
                             </form>
                         </div>
                         @empty
-                            <p class="text-muted">No tienes direcciones guardadas.</p>
+                            <p class="text-muted">{{ __('app.no_addresses') }}</p>
                         @endforelse
                         <hr>
-                        <hr>
-                        <h6 class="fw-bold mb-3">Añadir dirección</h6>
+                        <h6 class="fw-bold mb-3">{{ __('app.add_address') }}</h6>
 
                         @if($errors->any())
                             <div class="alert alert-danger">
@@ -147,80 +146,77 @@
                         <form action="{{ route('profile.storeAddress') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Calle y número</label>
-                                <input type="text" name="street" class="form-control" 
-                                placeholder="Calle Mayor 1" value="{{ old('street') }}">
+                                <label class="form-label">{{ __('app.street') }}</label>
+                                <input type="text" name="street" class="form-control"
+                                       placeholder="Calle Mayor 1" value="{{ old('street') }}">
                             </div>
                             <div class="row">
                                 <div class="col mb-3">
-                                    <label class="form-label">Ciudad</label>
-                                    <input type="text" name="city" class="form-control" 
-                                    value="{{ old('city') }}">
+                                    <label class="form-label">{{ __('app.city') }}</label>
+                                    <input type="text" name="city" class="form-control" value="{{ old('city') }}">
                                 </div>
                                 <div class="col mb-3">
-                                    <label class="form-label">Código postal</label>
-                                    <input type="text" name="postal_code" class="form-control" 
-                                    value="{{ old('postal_code') }}">
+                                    <label class="form-label">{{ __('app.postal_code') }}</label>
+                                    <input type="text" name="postal_code" class="form-control" value="{{ old('postal_code') }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col mb-3">
-                                    <label class="form-label">Provincia</label>
-                                    <input type="text" name="state" class="form-control" 
-                                    value="{{ old('state') }}">
+                                    <label class="form-label">{{ __('app.state') }}</label>
+                                    <input type="text" name="state" class="form-control" value="{{ old('state') }}">
                                 </div>
                                 <div class="col mb-3">
-                                    <label class="form-label">País</label>
-                                    <input type="text" name="country" class="form-control" 
-                                    value="{{ old('country', 'España') }}">
+                                    <label class="form-label">{{ __('app.country') }}</label>
+                                    <input type="text" name="country" class="form-control" value="{{ old('country', 'España') }}">
                                 </div>
                             </div>
                             <div class="form-check mb-3">
                                 <input type="checkbox" name="is_default" class="form-check-input" id="is_default">
-                                <label class="form-check-label" for="is_default">Establecer como dirección principal</label>
+                                <label class="form-check-label" for="is_default">{{ __('app.set_default') }}</label>
                             </div>
-                            <button class="btn text-white" style="background-color:#C0392B;">Añadir dirección</button>
+                            <button class="btn text-white" style="background-color:#C0392B;">{{ __('app.add_address') }}</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-           {{-- MÉTODOS DE PAGO --}}
-<div class="tab-pane fade {{ session('active_tab') == 'pagos' ? 'show active' : '' }}" id="pagos">
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <h5 class="fw-bold mb-4">Métodos de pago</h5>
-            <div class="alert alert-info d-flex align-items-center gap-2">
-                <span>💳</span>
-                <span>La integración con pasarela de pago está pendiente de implementación. Próximamente podrás gestionar tus métodos de pago aquí.</span>
-            </div>
-        </div>
-    </div>
-</div>
-          {{-- PEDIDOS --}}
-<div class="tab-pane fade {{ session('active_tab') == 'pedidos' ? 'show active' : '' }}" id="pedidos">
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <h5 class="fw-bold mb-4">Mis pedidos</h5>
-            @if($orders->isEmpty())
-                <p class="text-muted">No tienes pedidos todavía.</p>
-            @else
-                @foreach($orders as $order)
-                <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ $order->order_number }}</strong><br>
-                        <small class="text-muted">{{ $order->ordered_at->format('d/m/Y') }}</small>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold">{{ number_format($order->total_amount, 2) }} €</span><br>
-                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-danger mt-1">Ver detalle</a>
+            {{-- MÉTODOS DE PAGO --}}
+            <div class="tab-pane fade {{ session('active_tab') == 'pagos' ? 'show active' : '' }}" id="pagos">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4">{{ __('app.payment_methods') }}</h5>
+                        <div class="alert alert-info d-flex align-items-center gap-2">
+                            <span>💳</span>
+                            <span>{{ __('app.payment_pending') }}</span>
+                        </div>
                     </div>
                 </div>
-                @endforeach
-            @endif
-        </div>
-    </div>
-</div>
+            </div>
+
+            {{-- PEDIDOS --}}
+            <div class="tab-pane fade {{ session('active_tab') == 'pedidos' ? 'show active' : '' }}" id="pedidos">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4">{{ __('app.my_orders_title') }}</h5>
+                        @if($orders->isEmpty())
+                            <p class="text-muted">{{ __('app.no_orders') }}</p>
+                        @else
+                            @foreach($orders as $order)
+                            <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ $order->order_number }}</strong><br>
+                                    <small class="text-muted">{{ $order->ordered_at->format('d/m/Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="fw-bold">{{ number_format($order->total_amount, 2) }} €</span><br>
+                                    <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-danger mt-1">{{ __('app.view_detail') }}</a>
+                                </div>
+                            </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

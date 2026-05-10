@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -14,40 +13,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {
+    // GET /checkout — mostrar selección de dirección
     public function checkout()
     {
         $user = Auth::user();
         $items = $user->cartItems()->with('product')->get();
-
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-
-        $lineItems = [];
-
-        foreach ($items as $item) {
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => $item->product->name,
-                    ],
-                    'unit_amount' => $item->product->price * 100,
-                ],
-                'quantity' => $item->quantity,
-            ];
-        }
-
-        $checkout_session = $stripe->checkout->sessions->create([
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => route('orders.checkout.success', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
-            'cancel_url' => route('orders.checkout.cancel', [], true),
-        ]);
-
-        $order = new Order();
-        $order->user_id = $user->id;
-        $order->status = 'pending';
-        $order->total_amount = $items->sum(fn($item) => $item->product->price * $item->quantity);
-        $order->session_id = $checkout_session->id;
 
         if ($items->isEmpty()) {
             return redirect()->route('cart.index')
@@ -55,37 +25,12 @@ class OrderController extends Controller
         }
 
         $addresses = Address::where('user_id', $user->id)->get();
+        $total = $items->sum(fn($item) => $item->product->price * $item->quantity);
 
-        return redirect($checkout_session->url);
+        return view('orders.checkout', compact('items', 'addresses', 'total'));
     }
 
-    public function showCheckoutSuccess(Request $request)
-    {
-        try {
-            $user_session = $request->query('session_id');
-
-            if (!$user_session) {
-                throw new NotFoundHttpException('User session not found');
-            }
-
-            $user = Auth::user();
-            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-
-            $payment_session = $stripe->checkout->sessions->retrieve($user_session);
-            if (!$payment_session) {
-                throw new NotFoundHttpException('User session not found');
-            }
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException('Session not found');
-        }
-        return view('orders.checkout_success', compact('user'));
-    }
-
-    public function showCheckoutCancel()
-    {
-        return view('orders.checkout_cancel');
-    }
-
+    // POST /orders — crear pedido y redirigir a Stripe
     public function store(Request $request)
     {
         $request->validate([
@@ -149,11 +94,81 @@ class OrderController extends Controller
                 ->with('error', 'Error al procesar el pedido. Inténtalo de nuevo.');
         }
 
-        $orderForEmail = Order::with('items.product', 'user')->find($order->id);
-        Mail::to($user->email)->send(new OrderConfirmation($orderForEmail));
+        // Redirigir a Stripe
+        try {
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
 
-        return redirect()->route('orders.index')
-            ->with('mensaje', '¡Pedido realizado correctamente! Recibirás un email de confirmación.');
+            $lineItems = [];
+            foreach ($order->items as $item) {
+                $lineItems[] = [
+                    'price_data' => [
+                        'currency'     => 'eur',
+                        'product_data' => ['name' => $item->product->name],
+                        'unit_amount'  => (int)($item->unit_price * 100),
+                    ],
+                    'quantity' => $item->quantity,
+                ];
+            }
+
+            $checkout_session = $stripe->checkout->sessions->create([
+                'line_items'  => $lineItems,
+                'mode'        => 'payment',
+                'success_url' => route('orders.checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}&order_id=' . $order->id,
+                'cancel_url'  => route('orders.checkout.cancel', [], true) . '?order_id=' . $order->id,
+            ]);
+
+            return redirect($checkout_session->url);
+
+        } catch (\Exception $e) {
+            return redirect()->route('orders.index')
+                ->with('mensaje', '¡Pedido realizado! No se pudo procesar el pago, inténtalo desde tus pedidos.');
+        }
+    }
+
+    // GET /checkout/success — pago completado, enviar email
+    public function showCheckoutSuccess(Request $request)
+    {
+        try {
+            $sessionId = $request->query('session_id');
+            $orderId   = $request->query('order_id');
+
+            if (!$sessionId || !$orderId) {
+                throw new NotFoundHttpException();
+            }
+
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+            $payment_session = $stripe->checkout->sessions->retrieve($sessionId);
+
+            if (!$payment_session) {
+                throw new NotFoundHttpException();
+            }
+
+            // Actualizar estado del pedido
+            $order = Order::with('items.product', 'user')->findOrFail($orderId);
+            $order->update(['status' => 'processing']);
+
+            // Enviar email de confirmación
+            Mail::to($order->user->email)->send(new OrderConfirmation($order));
+
+        } catch (\Exception $e) {
+            return redirect()->route('orders.index')
+                ->with('error', 'Error al confirmar el pedido.');
+        }
+
+        return view('orders.checkout_success', compact('order'));
+    }
+
+    // GET /checkout/cancel — pago cancelado
+    public function showCheckoutCancel(Request $request)
+    {
+        $orderId = $request->query('order_id');
+        if ($orderId) {
+            $order = Order::find($orderId);
+            if ($order) {
+                $order->update(['status' => 'cancelled']);
+            }
+        }
+        return view('orders.checkout_cancel');
     }
 
     public function index()

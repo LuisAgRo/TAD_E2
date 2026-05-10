@@ -13,15 +13,22 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FavoriteController;
 //resumen pedido
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders');
-    Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-    Route::post('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
     Route::get('/checkout/success', [OrderController::class, 'showCheckoutSuccess'])->name('orders.checkout.success');
     Route::get('/checkout/cancel', [OrderController::class, 'showCheckoutCancel'])->name('orders.checkout.cancel');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders');
+    Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
+
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['es', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('lang.switch');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');

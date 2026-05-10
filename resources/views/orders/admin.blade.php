@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<h2 class="mb-4">Gestión de pedidos</h2>
+<h2 class="mb-4">{{ __('app.manage_orders') }}</h2>
 
 @if($orders->isEmpty())
-    <div class="alert alert-info">No hay pedidos todavía.</div>
+    <div class="alert alert-info">{{ __('app.no_orders') }}</div>
 @else
     <div class="table-responsive">
         <table class="table shadow-sm">
             <thead class="table-dark">
                 <tr>
-                    <th>Nº Pedido</th>
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th class="text-end">Total</th>
+                    <th>{{ __('app.order_number') }}</th>
+                    <th>{{ __('app.client') }}</th>
+                    <th>{{ __('app.date') }}</th>
+                    <th>{{ __('app.status') }}</th>
+                    <th class="text-end">{{ __('app.total') }}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,11 +29,11 @@
                         'cancelled'  => 'danger',
                     ];
                     $labels = [
-                        'pending'    => 'Pendiente',
-                        'processing' => 'En proceso',
-                        'shipped'    => 'Enviado',
-                        'delivered'  => 'Entregado',
-                        'cancelled'  => 'Cancelado',
+                        'pending'    => __('app.pending'),
+                        'processing' => __('app.processing'),
+                        'shipped'    => __('app.shipped'),
+                        'delivered'  => __('app.delivered'),
+                        'cancelled'  => __('app.cancelled'),
                     ];
                 @endphp
                 <tr>
@@ -47,7 +47,7 @@
                     </td>
                     <td class="text-end fw-bold">{{ number_format($order->total_amount, 2) }} €</td>
                     <td class="text-end">
-                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-danger">Ver</a>
+                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-danger">{{ __('app.view') }}</a>
                     </td>
                 </tr>
                 @endforeach

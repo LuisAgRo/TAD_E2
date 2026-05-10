@@ -2,25 +2,25 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Productos</h2>
+    <h2>{{ __('app.products_title') }}</h2>
     @if(auth()->check() && auth()->user()->role_id === 1)
-        <a href="{{ route('products.create') }}" class="btn btn-danger">+ Nuevo producto</a>
+        <a href="{{ route('products.create') }}" class="btn btn-danger">{{ __('app.new_product') }}</a>
     @endif
 </div>
 
 <form method="GET" action="{{ route('products.index') }}" class="mb-4">
     <div class="d-flex gap-2 align-items-center">
         <select name="category_id" class="form-select w-auto">
-            <option value="">Todas las categorías</option>
+            <option value="">{{ __('app.all_categories') }}</option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
+                    {{ app()->getLocale() == 'en' ? ($category->name_en ?? $category->name) : $category->name }}
                 </option>
             @endforeach
         </select>
-        <button type="submit" class="btn btn-danger">Filtrar</button>
+        <button type="submit" class="btn btn-danger">{{ __('app.filter') }}</button>
         @if(request('category_id'))
-            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">Limpiar</a>
+            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">{{ __('app.clear') }}</a>
         @endif
     </div>
 </form>
@@ -37,33 +37,33 @@
                 <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
             @else
                 <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <span class="text-white">Sin imagen</span>
+                    <span class="text-white">{{ __('app.no_image') }}</span>
                 </div>
             @endif
 
             <div class="card-body">
                 <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">
-    <h5 class="card-title">{{ $product->name }}</h5>
-</a>
+                    <h5 class="card-title">{{ $product->name }}</h5>
+                </a>
                 <p class="card-text text-muted small">{{ Str::limit($product->description, 80) }}</p>
                 <span class="badge mb-2" style="background-color: #C0392B;">
-                    {{ $product->category->name ?? 'Sin categoría' }}
+                    {{ app()->getLocale() == 'en' ? ($product->category->name_en ?? $product->category->name) : $product->category->name }}
                 </span>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                     <h5 class="mb-0 fw-bold">{{ number_format($product->price, 2) }} €</h5>
-                    <span class="text-muted small">Stock: {{ $product->stock }}</span>
+                    <span class="text-muted small">{{ __('app.stock') }}: {{ $product->stock }}</span>
                 </div>
             </div>
 
             <div class="card-footer bg-white">
                 @if(auth()->check() && auth()->user()->role_id === 1)
                     <div class="d-flex gap-2">
-                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm flex-fill">Editar</a>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm flex-fill">{{ __('app.edit') }}</a>
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="flex-fill">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger btn-sm w-100" type="submit"
-                                onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
+                                onclick="return confirm('¿{{ __('app.delete') }} producto?')">{{ __('app.delete') }}</button>
                         </form>
                     </div>
                 @else
@@ -72,16 +72,16 @@
                             <form action="{{ route('cart.items.store', $product->id) }}" method="POST">
                                 @csrf
                                 <button class="btn w-100 text-white" style="background-color: #C0392B;" type="submit">
-                                    Añadir al carrito
+                                    {{ __('app.add_to_cart') }}
                                 </button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="btn w-100 text-white" style="background-color: #C0392B;">
-                                Inicia sesion para comprar
+                                {{ __('app.login_to_buy') }}
                             </a>
                         @endauth
                     @else
-                        <button class="btn btn-secondary w-100" disabled>Sin stock</button>
+                        <button class="btn btn-secondary w-100" disabled>{{ __('app.no_stock') }}</button>
                     @endif
                 @endif
             </div>
@@ -89,7 +89,7 @@
     </div>
     @empty
         <div class="col-12">
-            <p class="text-muted">No hay productos en esta categoría.</p>
+            <p class="text-muted">{{ __('app.no_products_category') }}</p>
         </div>
     @endforelse
 </div>
