@@ -82,9 +82,14 @@ class OrderController extends Controller
                     'unit_price' => $item->product->price,
                     'subtotal'   => $item->product->price * $item->quantity,
                 ]);
+
+            $item->product->decrement('stock', $item->quantity);
+
             }
 
             DB::commit();
+
+
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('cart.index')
@@ -148,9 +153,6 @@ class OrderController extends Controller
 
             if ($order->status === 'pending') {
                 DB::transaction(function () use ($order) {
-                    foreach ($order->items as $item) {
-                        $item->product->decrement('stock', $item->quantity);
-                    }
                     $order->user->cartItems()->delete();
                     $order->update(['status' => 'processing']);
                 });

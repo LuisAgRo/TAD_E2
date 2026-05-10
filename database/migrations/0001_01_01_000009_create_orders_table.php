@@ -9,24 +9,30 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   public function up(): void
 {
     Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->foreignId('address_id')->constrained()->onDelete('cascade');
-        $table->string('order_number')->unique();
+        
+        $table->foreignId('address_id')
+              ->nullable() 
+              ->constrained('addresses')
+              ->onDelete('set null'); 
+
+        $table->string('order_number')->unique(); // Asegúrate de que esta línea esté separada
         $table->string('delivery_address')->nullable();
         $table->string('invoice_address')->nullable();
         $table->decimal('total_amount', 10, 2);
         $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
-        $table->string('session_id')->nullable();
+        
+        $table->string('session_id')->nullable(); 
+        
         $table->timestamp('ordered_at')->nullable();
         $table->timestamp('delivery_date')->nullable();
         $table->timestamps();
     });
 }
-
     /**
      * Reverse the migrations.
      */
