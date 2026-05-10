@@ -99,7 +99,17 @@
                                 </label>
                             </div>
                             @endforeach
+                            
                         </div>
+
+                        {{-- Botón añadir dirección --}}
+                        <button type="button" class="btn btn-outline-secondary btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAddress">
+                            <i class="bi bi-plus-circle"></i> {{ __('app.add_new_address') }}
+                        </button>
+
+                        @error('address_id')
+                            <div class="text-danger small mb-2">{{ $message }}</div>
+                        @enderror
 
                         <script>
                         function toggleInvoiceAddress() {
@@ -125,6 +135,54 @@
                 <a href="{{ route('cart.index') }}" class="btn btn-outline-secondary w-100 mt-2">
                     {{ __('app.back_to_cart') }}
                 </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- MODAL AÑADIR DIRECCIÓN --}}
+<div class="modal fade" id="modalAddAddress" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#C0392B;">
+                <h5 class="modal-title text-white"><i class="bi bi-plus-circle"></i> {{ __('app.add_address') }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('profile.storeAddress') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('app.street') }}</label>
+                        <input type="text" name="street" class="form-control" placeholder="Calle Mayor 1" required>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">{{ __('app.city') }}</label>
+                            <input type="text" name="city" class="form-control" required>
+                        </div>
+                        <div class="col mb-3">
+                            <label class="form-label">{{ __('app.postal_code') }}</label>
+                            <input type="text" inputmode="numeric" name="postal_code" class="form-control" required>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">{{ __('app.state') }}</label>
+                            <input type="text" name="state" class="form-control">
+                        </div>
+                        <div class="col mb-3">
+                            <label class="form-label">{{ __('app.country') }}</label>
+                            <input type="text" name="country" class="form-control" value="España">
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="is_default" class="form-check-input" id="modal_is_default">
+                        <label class="form-check-label" for="modal_is_default">{{ __('app.set_default') }}</label>
+                    </div>
+                    <button type="submit" class="btn w-100 text-white" style="background-color:#C0392B;">
+                        {{ __('app.add_address') }}
+                    </button>
+                </form>
             </div>
         </div>
     </div>
