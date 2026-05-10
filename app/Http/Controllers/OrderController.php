@@ -167,6 +167,7 @@ class OrderController extends Controller
     public function showCheckoutCancel(Request $request)
     {
         $orderId = $request->query('order_id');
+        $order = null;
         if ($orderId) {
             $order = Order::with('items.product')->find($orderId);
             if ($order) {
@@ -176,7 +177,7 @@ class OrderController extends Controller
                 $order->update(['status' => 'cancelled']);
             }
         }
-        return view('orders.checkout_cancel');
+        return view('orders.checkout_cancel', compact('order'));
     }
 
     public function retry($id)
