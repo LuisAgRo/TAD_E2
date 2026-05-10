@@ -34,7 +34,8 @@
     <div class="col">
         <div class="card h-100 shadow-sm">
             @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image">
+               <img src="{{ asset($product->image) }}" class="img-fluid rounded shadow product-show-image" style="height: 400px; object-fit: cover; width: 100%;"
+               alt="{{ $product->name }}">
             @else
                 <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center product-image-placeholder">
                     <span class="text-white">{{ __('app.no_image') }}</span>

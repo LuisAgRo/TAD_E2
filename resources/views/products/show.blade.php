@@ -13,11 +13,12 @@
     {{-- Imagen --}}
     <div class="col-md-6">
         @if($product->image)
-            <img src="{{ asset('storage/' . $product->image) }}"
-                 class="img-fluid rounded shadow product-show-image">
+           <img src="{{ asset($product->image) }}" class="img-fluid rounded shadow product-show-image" style="width: 100%; height: 500px; object-fit: contain; background-color: #f8f9fa;">
         @else
             <div class="bg-light rounded d-flex align-items-center justify-content-center shadow product-show-placeholder">
-                <span class="text-muted product-show-icon">🖼️</span>
+                <span class="text-muted product-show-icon">
+                    <i class="bi bi-palette"></i>
+                </span>
             </div>
         @endif
     </div>

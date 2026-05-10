@@ -59,7 +59,7 @@ class CartController extends Controller
             ]);
         }
 
-        return back()->with('mensaje', __('app.product_added_cart'));
+         return back()->with('mensaje', __('app.product_added_cart'));
     }
 
     public function update(Request $request, CartItem $cartItem): RedirectResponse
