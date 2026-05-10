@@ -11,6 +11,13 @@ use App\Models\Category;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FavoriteController;
+use Illuminate\Support\Facades\Schedule;
+
+Route::get('/orders/{id}/retry', [OrderController::class, 'retry'])->name('orders.retry');
+
+
+Schedule::command('orders:cancel-expired')->everyFiveMinutes();
+
 //resumen pedido
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
@@ -21,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders');
     Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-});
+}); 
 
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['es', 'en'])) {
@@ -83,6 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favorites.index');
     
     // Esta ruta servirá para añadir o quitar productos de la lista
+    Route::post('/favoritos/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+
+    // Añadir o quitar productos de la lista de favoritos
     Route::post('/favoritos/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 
 });
