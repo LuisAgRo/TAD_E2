@@ -186,9 +186,12 @@
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">{{ __('app.payment_methods') }}</h5>
                         <div class="alert alert-info d-flex align-items-center gap-2">
-                            <span>💳</span>
-                            <span>{{ __('app.payment_pending') }}</span>
+                            <i class="bi bi-credit-card fs-5"></i>
+                            <span>{{ __('app.payment_stripe_info') }}</span>
                         </div>
+                        <a href="{{ route('orders.checkout') }}" class="btn text-white" style="background-color:#C0392B;">
+                            <i class="bi bi-bag"></i> {{ __('app.go_to_shop') }}
+                        </a>
                     </div>
                 </div>
             </div>

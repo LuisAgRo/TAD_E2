@@ -61,7 +61,7 @@ return [
     'subtotal'         => 'Subtotal',
     'total'            => 'Total',
     'clear_cart'       => 'Vaciar carrito',
-    'proceed_checkout' => 'Proceder al pago →',
+    'proceed_checkout' => 'Revisar pedido →',
 
     // Checkout
     'order_summary'    => 'Resumen del pedido',
@@ -122,8 +122,12 @@ return [
     'state'                  => 'Provincia',
     'country'                => 'País',
     'set_default'            => 'Establecer como dirección principal',
-    'payment_pending'        => 'La integración con pasarela de pago está pendiente de implementación.',
+    'payment_stripe_info' => 'Los pagos se procesan de forma segura a través de Stripe. No almacenamos datos de tu tarjeta.',
+    'go_to_shop'          => 'Ir a la tienda',
     'my_favorites' => 'Mis Favoritos',
     'no_favorites' => 'No tienes nada guardado aún.',
+    'footer_tagline' => 'Arte hecho a mano',
+    'product_added_cart' => 'Producto añadido al carrito.',
+
 
 ];
