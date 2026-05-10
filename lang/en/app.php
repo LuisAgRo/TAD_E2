@@ -128,6 +128,19 @@ return [
     'no_favorites' => 'You have nothing saved yet.',
     'footer_tagline' => 'Handmade art',
     'product_added_cart' => 'Product added to cart.',
+    'add_new_address' => 'Add new address',
+    'address_added'   => 'Address added successfully.',
+    'data_updated'        => 'Datos actualizados correctamente',
+    'wrong_password'      => 'La contraseña actual no es correcta',
+    'password_updated'    => 'Contraseña actualizada correctamente',
+    'street_required'     => 'La calle es obligatoria',
+    'city_required'       => 'La ciudad es obligatoria',
+    'postal_code_required'=> 'El código postal es obligatorio',
+    'postal_code_invalid' => 'El código postal debe tener 4 o 5 dígitos',
+    'country_required'    => 'El país es obligatorio',
+    'address_deleted'     => 'Dirección eliminada correctamente',
+    'payment_added'       => 'Método de pago añadido',
+    'payment_deleted'     => 'Método de pago eliminado',
 
 
 ];

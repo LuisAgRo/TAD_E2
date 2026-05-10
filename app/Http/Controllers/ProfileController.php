@@ -33,7 +33,7 @@ class ProfileController extends Controller
             'email' => $request->email,
         ]);
 
-        return back()->with('mensaje', 'Datos actualizados correctamente');
+        return back()->with('mensaje', __('app.data_updated'));
     }
 
     public function updatePassword(Request $request)
@@ -52,7 +52,7 @@ class ProfileController extends Controller
 
         if (!Hash::check($request->current_password, Auth::user()->password)) {
             return back()
-                ->withErrors(['current_password' => 'La contraseña actual no es correcta'])
+                ->withErrors(['current_password' => __('app.wrong_password')])
                 ->with('active_tab', 'password');
         }
 
@@ -61,62 +61,62 @@ class ProfileController extends Controller
         ]);
 
         return back()
-            ->with('mensaje', 'Contraseña actualizada correctamente')
+            ->with('mensaje', __('app.password_updated'))
             ->with('active_tab', 'password');
     }
 
-   public function storeAddress(Request $request)
-{
-    $validator = validator($request->all(), [
-        'street'      => 'required|string',
-        'city'        => 'required|string',
-        'postal_code' => 'required|digits_between:4,5',
-        'country'     => 'required|string',
-        'state'       => 'nullable|string',
-    ], [
-        'street.required'      => 'La calle es obligatoria',
-        'city.required'        => 'La ciudad es obligatoria',
-        'postal_code.required'       => 'El código postal es obligatorio',
-        'postal_code.digits_between' => 'El código postal debe tener 4 o 5 dígitos',
-        'country.required'     => 'El país es obligatorio',
-    ]);
+    public function storeAddress(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'street'      => 'required|string',
+            'city'        => 'required|string',
+            'postal_code' => 'required|digits_between:4,5',
+            'country'     => 'required|string',
+            'state'       => 'nullable|string',
+        ], [
+            'street.required'            => __('app.street_required'),
+            'city.required'              => __('app.city_required'),
+            'postal_code.required'       => __('app.postal_code_required'),
+            'postal_code.digits_between' => __('app.postal_code_invalid'),
+            'country.required'           => __('app.country_required'),
+        ]);
 
-    if ($validator->fails()) {
-        return back()
-            ->withErrors($validator)
-            ->withInput()
-            ->with('active_tab', 'direcciones');
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('active_tab', 'direcciones');
+        }
+
+        if ($request->is_default) {
+            Address::where('user_id', Auth::id())->update(['is_default' => false]);
+        }
+
+        Address::create([
+            'user_id'     => Auth::id(),
+            'street'      => $request->street,
+            'city'        => $request->city,
+            'state'       => $request->state,
+            'postal_code' => $request->postal_code,
+            'country'     => $request->country,
+            'is_default'  => $request->boolean('is_default'),
+        ]);
+
+        $referer = $request->headers->get('referer', route('profile.index'));
+
+        return redirect($referer)
+            ->with('mensaje', __('app.address_added'));
     }
-
-    if ($request->is_default) {
-        Address::where('user_id', Auth::id())->update(['is_default' => false]);
-    }
-
-    Address::create([
-        'user_id'     => Auth::id(),
-        'street'      => $request->street,
-        'city'        => $request->city,
-        'state'       => $request->state,
-        'postal_code' => $request->postal_code,
-        'country'     => $request->country,
-        'is_default'  => $request->boolean('is_default'),
-    ]);
-
-    return back()
-        ->with('mensaje', 'Dirección añadida correctamente')
-        ->with('active_tab', 'direcciones');
-}
 
     public function destroyAddress($id)
     {
         $address = Address::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $address->delete();
         return back()
-            ->with('mensaje', 'Dirección eliminada correctamente')
+            ->with('mensaje', __('app.address_deleted'))
             ->with('active_tab', 'direcciones');
     }
 
-    // Métodos de pago simulados
     public function storePaymentMethod(Request $request)
     {
         $request->validate([
@@ -136,7 +136,7 @@ class ProfileController extends Controller
         ];
         session(['payment_methods' => $methods]);
 
-        return back()->with('mensaje', 'Método de pago añadido');
+        return back()->with('mensaje', __('app.payment_added'));
     }
 
     public function destroyPaymentMethod($id)
@@ -144,6 +144,6 @@ class ProfileController extends Controller
         $methods = session('payment_methods', []);
         $methods = array_filter($methods, fn($m) => $m['id'] !== $id);
         session(['payment_methods' => array_values($methods)]);
-        return back()->with('mensaje', 'Método de pago eliminado');
+        return back()->with('mensaje', __('app.payment_deleted'));
     }
 }
