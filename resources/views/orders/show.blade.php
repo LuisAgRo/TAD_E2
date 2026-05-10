@@ -89,10 +89,12 @@
 <div class="card shadow-sm border-0 mt-3">
     <div class="card-body p-4 text-center">
         <p class="text-muted mb-3">{{ __('app.pending_payment_msg') }}</p>
-        <a href="{{ route('orders.retry', $order->id) }}" class="btn text-white fw-bold"
-           style="background-color:#C0392B;">
-            <i class="bi bi-credit-card"></i> {{ __('app.retry_payment') }}
-        </a>
+            <div class="text-center">
+                <a href="{{ route('orders.retry', $order->id) }}" class="btn text-white fw-bold"
+                   style="background-color:#C0392B;">
+                    <i class="bi bi-credit-card"></i> {{ __('app.retry_payment') }}
+                </a>
+            </div>
     </div>
 </div>
 @endif

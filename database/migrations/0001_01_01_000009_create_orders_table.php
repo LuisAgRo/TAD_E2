@@ -20,6 +20,7 @@ return new class extends Migration
         $table->string('invoice_address')->nullable();
         $table->decimal('total_amount', 10, 2);
         $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
+        $table->string('session_id')->nullable();
         $table->timestamp('ordered_at')->nullable();
         $table->timestamp('delivery_date')->nullable();
         $table->timestamps();
