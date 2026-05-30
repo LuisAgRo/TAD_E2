@@ -32,6 +32,10 @@ if [ -n "$APP_DEBUG" ]; then
 fi
 
 if [ -n "$APP_URL" ]; then
+    # Convertir http:// a https:// en producción (excepto localhost)
+    if [ "$APP_ENV" = "production" ] && ! echo "$APP_URL" | grep -q "localhost"; then
+        APP_URL=$(echo "$APP_URL" | sed 's|^http://|https://|')
+    fi
     sed -i "s|^APP_URL=.*|APP_URL=$APP_URL|" /app/.env
 fi
 

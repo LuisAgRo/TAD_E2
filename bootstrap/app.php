@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
-        $middleware->web(append: [
+        $middleware->web(prepend: [
+            \App\Http\Middleware\TrustProxies::class,
+        ], append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
     })
