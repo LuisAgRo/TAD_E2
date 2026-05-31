@@ -145,5 +145,10 @@ return [
     'pending_payment_msg' => 'Tu pedido está pendiente de pago. ¿Quieres completar el pago?',
     'retry_payment'       => 'Completar pago',
 
-
+    'reset_password'      => 'Restablecer Contraseña',
+    'reset_password_info' => 'Indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecerla.',
+    'send_reset_link'     => 'Enviar enlace al correo',
+    'new_password_title'  => 'Nueva Contraseña',
+    'reset_password_email'=> 'Por favor, introduce tu nueva contraseña para el correo:',
+    'password'            => 'Contraseña',
 ];

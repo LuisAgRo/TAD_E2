@@ -144,6 +144,11 @@ return [
     'payment_deleted'     => 'Método de pago eliminado',
     'pending_payment_msg' => 'Your order is pending payment. Would you like to complete it?',
     'retry_payment'       => 'Complete payment',
-
+    'reset_password'      => 'Reset Password',
+    'reset_password_info' => 'Enter your email address and we will send you a link to reset it.',
+    'send_reset_link'     => 'Send reset link',
+    'new_password_title'  => 'New Password',
+    'reset_password_email'=> 'Please enter your new password for:',
+    'password'            => 'Password',
 
 ];
