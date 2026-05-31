@@ -13,7 +13,6 @@ class ProductsController extends Controller
         $query = Product::with(['category', 'categories']);
 
         if ($request->filled('category_id')) {
-            \Log::info('Filtrando por categoria: ' . $request->category_id);
             $categoryId = $request->category_id;
             $query->where(function ($subQuery) use ($categoryId) {
                 $subQuery->where('category_id', $categoryId)
