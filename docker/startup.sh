@@ -61,5 +61,9 @@ fi
 chown -R www-data: /app/storage
 chmod -R 755 /app/storage
 
+cd /app && php artisan config:clear 2>/dev/null || true
+cd /app && php artisan cache:clear 2>/dev/null || true
+cd /app && php artisan view:clear 2>/dev/null || true
+
 # Iniciar supervisor
 /usr/bin/supervisord -c /app/docker/supervisord.conf
