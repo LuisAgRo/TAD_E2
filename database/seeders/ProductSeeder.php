@@ -67,8 +67,11 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $product) {
-            Product::create($product);
-        }
+       foreach ($products as $productData) {
+    $product = Product::create($productData);
+    if ($productData['category_id']) {
+        $product->categories()->sync([$productData['category_id']]);
+    }
+}
     }
 }
