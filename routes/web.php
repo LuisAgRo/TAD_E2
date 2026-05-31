@@ -67,7 +67,6 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 // Productos públicos
 Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
-Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.index');
 Route::get('/products/{id}', [ProductsController::class, 'show'])
     ->whereNumber('id')
     ->name('products.show');
@@ -101,6 +100,8 @@ Route::middleware('auth')->group(function () {
 
 // Solo admin
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.index');
+
     Route::get('/products/create', [ProductsController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
     Route::get('/products/{id}/edit', [ProductsController::class, 'edit'])

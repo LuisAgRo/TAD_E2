@@ -14,11 +14,8 @@ class ProductsController extends Controller
 
         if ($request->filled('category_id')) {
             $categoryId = $request->category_id;
-            $query->where(function ($subQuery) use ($categoryId) {
-                $subQuery->where('category_id', $categoryId)
-                    ->orWhereHas('categories', function ($categoryQuery) use ($categoryId) {
-                        $categoryQuery->where('categories.id', $categoryId);
-                    });
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
             });
         }
 
