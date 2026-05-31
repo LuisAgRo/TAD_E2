@@ -47,11 +47,14 @@ fi
 sed -i "s|LISTEN_PORT|$PORT|g" /etc/nginx/nginx.conf
 
 # Generar base de datos si es SQLite
-if [ "$DB_CONNECTION" = "sqlite" ] && [ ! -f /app/database/database.sqlite ]; then
-    echo "Creando base de datos SQLite..."
-    touch /app/database/database.sqlite
-    chown www-data: /app/database/database.sqlite
+if [ "$DB_CONNECTION" = "sqlite" ]; then
+    if [ ! -f /app/database/database.sqlite ]; then
+        echo "Creando base de datos SQLite..."
+        touch /app/database/database.sqlite
+        chown www-data: /app/database/database.sqlite
+    fi
     cd /app && php artisan migrate --force 2>/dev/null || true
+    cd /app && php artisan db:seed --force 2>/dev/null || true
 fi
 
 # Asegurar permisos correctos
