@@ -11,7 +11,7 @@
             <div class="col">
                 <div class="card h-100 shadow-sm border-0">
                     @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image">
+                        <img src="{{ asset($product->image) }}" class="card-img-top product-image">
                     @endif
 
                     <div class="card-body">

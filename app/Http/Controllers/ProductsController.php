@@ -97,6 +97,15 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+
+        if ($product->image) {
+        $imagePath = public_path($product->image);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
         $product->delete();
 
         return redirect()->route('products.index')
