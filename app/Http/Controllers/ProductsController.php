@@ -46,7 +46,10 @@ class ProductsController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+            $imageName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('img'), $imageName);
+            $data['image'] = 'img/' . $imageName;
         }
 
         $product = Product::create($data);
@@ -78,8 +81,11 @@ class ProductsController extends Controller
         $product = Product::findOrFail($id);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
-        }
+        $file = $request->file('image');
+        $imageName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('img'), $imageName);
+        $data['image'] = 'img/' . $imageName;
+    }
 
         $product->update($data);
         $product->categories()->sync([$data['category_id']]);
