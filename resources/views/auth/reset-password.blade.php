@@ -25,11 +25,20 @@
                         @csrf
 
                         <input type="hidden" name="token" value="{{ old('token', $request->route('token')) }}">
-                        <input type="hidden" name="email" value="{{ old('email', $request->email) }}">
 
                         <div class="mb-4 text-sm text-muted">
-                            {{ __('app.reset_password_email') }} <strong>{{ $request->email }}</strong>
+                            {{ __('app.reset_password_email') }} <strong>{{ old('email', $request->email) }}</strong>
+                        </div>
 
+                        <div class="form-group row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('app.email_address') }}</label>
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                    name="email" value="{{ old('email', $request->email) }}" required autocomplete="email" readonly>
+                                @error('email')
+                                    <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="form-group row mb-3">
