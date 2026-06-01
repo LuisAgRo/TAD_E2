@@ -130,3 +130,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->whereNumber('id')
         ->name('categories.destroy');
 });
+
+// Añade esto al final de routes/web.php temporalmente
+Route::get('/forzar-migracion', function() {
+    // Esto ejecutará las migraciones pendientes en la base de datos de producción
+    \Artisan::call('migrate', ["--force" => true]);
+    return "Base de datos actualizada en producción.";
+});

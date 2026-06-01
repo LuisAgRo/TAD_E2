@@ -131,7 +131,6 @@ class OrderController extends Controller
     }
 
     // GET /checkout/success — pago completado, enviar email
-    
     public function showCheckoutSuccess(Request $request)
 {
     try {
@@ -160,6 +159,7 @@ class OrderController extends Controller
 
     return view('orders.checkout_success', compact('order'));
 }
+
     // GET /checkout/cancel — pago cancelado
     public function showCheckoutCancel(Request $request)
     {
