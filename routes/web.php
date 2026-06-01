@@ -51,7 +51,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/', function () {
     $categories = Category::all();
     $products = Product::latest()->take(6)->get();
-    return view('welcome', compact('categories', 'products'));
+    return response()
+        ->view('welcome', compact('categories', 'products'))
+        ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
 })->name('home');
 
 Route::get('/dashboard', function () {

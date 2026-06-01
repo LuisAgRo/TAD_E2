@@ -10,11 +10,16 @@
                 </div>
 
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            {{ __('Revisa los campos e intenta de nuevo.') }}
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
 
-                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
-                        <input type="hidden" name="email" value="{{ $request->email }}">
+                        <input type="hidden" name="token" value="{{ old('token', $request->route('token')) }}">
+                        <input type="hidden" name="email" value="{{ old('email', $request->email) }}">
 
                         <div class="mb-4 text-sm text-muted">
                             {{ __('Por favor, introduce tu nueva contraseña para el correo: ') }} 
