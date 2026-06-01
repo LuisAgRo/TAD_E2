@@ -24,7 +24,11 @@ class ProductsController extends Controller
 
         $products = $query->paginate(10)->withQueryString();
 
-        return view('products.index', compact('products', 'categories'));
+        return response()
+            ->view('products.index', compact('products', 'categories'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     public function create()
@@ -117,4 +121,3 @@ class ProductsController extends Controller
     return view('products.show', compact('product'));
 }
 }
-
