@@ -149,4 +149,8 @@ return [
     'send_password_link'     => 'Enviar enlace al correo',
     'email_address'          => 'Correo Electrónico',
 
+    'reset_password_email' => 'Por favor, introduce tu nueva contraseña para el correo:',
+    'reset_password'       => 'Restablecer Contraseña',
+    'password'             => 'Contraseña',
+
 ];

@@ -148,5 +148,7 @@ return [
     'reset_password_inst'    => 'Tell us your email address and we will send you a reset link.',
     'send_password_link'     => 'Send password reset link',
     'email_address'          => 'E-Mail Address',    
-
+    'reset_password_email' => 'Please enter your new password for:',
+    'reset_password'       => 'Reset Password',
+    'password'             => 'Password',
 ];
