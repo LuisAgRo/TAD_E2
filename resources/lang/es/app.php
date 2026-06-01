@@ -152,5 +152,6 @@ return [
     'reset_password_email' => 'Por favor, introduce tu nueva contraseña para el correo:',
     'reset_password'       => 'Restablecer Contraseña',
     'password'             => 'Contraseña',
+    'reset_password_error' => 'No se pudo restablecer la contraseña.',
 
 ];

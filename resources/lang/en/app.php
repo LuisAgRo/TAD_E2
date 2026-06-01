@@ -151,4 +151,5 @@ return [
     'reset_password_email' => 'Please enter your new password for:',
     'reset_password'       => 'Reset Password',
     'password'             => 'Password',
+    'reset_password_error' => 'Could not reset the password.',
 ];

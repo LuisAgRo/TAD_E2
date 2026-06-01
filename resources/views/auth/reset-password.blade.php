@@ -13,7 +13,12 @@
                 <div class="card-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
-                            {{ __('app.reset_password_error') }}
+                            <div>{{ __('app.reset_password_error') }}</div>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
                     <form method="POST" action="{{ route('password.update') }}">
