@@ -9,11 +9,20 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'category_id' => 'nullable|integer|min:0',
+        ]);
+
         $categories = Category::all();
         $query = Product::with(['category', 'categories']);
 
-        if ($request->filled('category_id')) {
-            $categoryId = $request->category_id;
+        $categoryId = $request->integer('category_id');
+        if ($categoryId > 0) {
+            // Validate that the category actually exists before filtering
+            if (! Category::where('id', $categoryId)->exists()) {
+                abort(422, 'La categoría especificada no existe.');
+            }
+            
             $query->where(function ($subQuery) use ($categoryId) {
                 $subQuery->where('category_id', $categoryId)
                     ->orWhereHas('categories', function ($categoryQuery) use ($categoryId) {

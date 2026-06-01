@@ -131,42 +131,35 @@ class OrderController extends Controller
     }
 
     // GET /checkout/success — pago completado, enviar email
+    
     public function showCheckoutSuccess(Request $request)
-    {
-        try {
-            $sessionId = $request->query('session_id');
-            $orderId   = $request->query('order_id');
+{
+    try {
+        $sessionId = $request->query('session_id');
+        $orderId   = $request->query('order_id');
 
-            if (!$sessionId || !$orderId) {
-                throw new NotFoundHttpException();
-            }
-
-            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-            $payment_session = $stripe->checkout->sessions->retrieve($sessionId);
-
-            if (!$payment_session) {
-                throw new NotFoundHttpException();
-            }
-
-            // Actualizar estado del pedido
-            $order = Order::with('items.product', 'user')->findOrFail($orderId);
-
-            if ($order->status === 'pending') {
-                DB::transaction(function () use ($order) {
-                    $order->user->cartItems()->delete();
-                    $order->update(['status' => 'processing']);
-                });
-
-                Mail::to($order->user->email)->send(new OrderConfirmation($order));
-            }
-        } catch (\Exception $e) {
-            return redirect()->route('orders.index')
-                ->with('error', 'Error al confirmar el pedido.');
+        if (!$sessionId || !$orderId) {
+            throw new NotFoundHttpException();
         }
 
-        return view('orders.checkout_success', compact('order'));
+        $order = Order::with('items.product', 'user')->findOrFail($orderId);
+
+        if ($order->status === 'pending') {
+            DB::transaction(function () use ($order) {
+                $order->user->cartItems()->delete();
+                $order->update(['status' => 'processing']);
+            });
+
+            Mail::to($order->user->email)->send(new OrderConfirmation($order));
+        }
+
+    } catch (\Exception $e) {
+        return redirect()->route('orders.index')
+            ->with('error', 'Error al confirmar el pedido.');
     }
 
+    return view('orders.checkout_success', compact('order'));
+}
     // GET /checkout/cancel — pago cancelado
     public function showCheckoutCancel(Request $request)
     {
