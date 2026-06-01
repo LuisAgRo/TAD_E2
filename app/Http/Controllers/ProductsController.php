@@ -17,11 +17,21 @@ class ProductsController extends Controller
         $query = Product::with(['category', 'categories']);
 
         $categoryId = $request->integer('category_id');
+        
+        // Debug log
+        \Log::info('Products filter request', [
+            'category_id_param' => $request->input('category_id'),
+            'category_id_integer' => $categoryId,
+            'filled' => $request->filled('category_id'),
+        ]);
+
         if ($categoryId > 0) {
             // Validate that the category actually exists before filtering
             if (! Category::where('id', $categoryId)->exists()) {
                 abort(422, 'La categoría especificada no existe.');
             }
+            
+            \Log::info('Applying category filter', ['category_id' => $categoryId]);
             
             $query->where(function ($subQuery) use ($categoryId) {
                 $subQuery->where('category_id', $categoryId)
