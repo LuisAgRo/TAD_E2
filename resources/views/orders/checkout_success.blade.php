@@ -7,7 +7,7 @@
             <div class="card-body p-4 p-md-5 text-center">
                 <h1 class="h3 fw-bold mb-3">Pago completado</h1>
                 <p class="text-muted mb-4">
-                    Gracias por tu compra, <strong>{{ $user->name }}</strong>.
+                    Gracias por tu compra, <strong>{{ $order->user->name }}</strong>
                     Tu pedido se ha procesado correctamente.
                 </p>
 

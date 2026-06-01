@@ -9,30 +9,11 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $request->validate([
-            'category_id' => 'nullable|integer|min:0',
-        ]);
-
         $categories = Category::all();
         $query = Product::with(['category', 'categories']);
 
-        $categoryId = $request->integer('category_id');
-        
-        // Debug log
-        \Log::info('Products filter request', [
-            'category_id_param' => $request->input('category_id'),
-            'category_id_integer' => $categoryId,
-            'filled' => $request->filled('category_id'),
-        ]);
-
-        if ($categoryId > 0) {
-            // Validate that the category actually exists before filtering
-            if (! Category::where('id', $categoryId)->exists()) {
-                abort(422, 'La categoría especificada no existe.');
-            }
-            
-            \Log::info('Applying category filter', ['category_id' => $categoryId]);
-            
+        if ($request->filled('category_id')) {
+            $categoryId = $request->category_id;
             $query->where(function ($subQuery) use ($categoryId) {
                 $subQuery->where('category_id', $categoryId)
                     ->orWhereHas('categories', function ($categoryQuery) use ($categoryId) {
@@ -43,11 +24,7 @@ class ProductsController extends Controller
 
         $products = $query->paginate(10)->withQueryString();
 
-        return response()
-            ->view('products.index', compact('products', 'categories'))
-            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+        return view('products.index', compact('products', 'categories'));
     }
 
     public function create()
@@ -140,3 +117,4 @@ class ProductsController extends Controller
     return view('products.show', compact('product'));
 }
 }
+

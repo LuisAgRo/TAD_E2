@@ -131,7 +131,7 @@ class OrderController extends Controller
     }
 
     // GET /checkout/success — pago completado, enviar email
-   public function showCheckoutSuccess(Request $request)
+    public function showCheckoutSuccess(Request $request)
     {
         try {
             $sessionId = $request->query('session_id');
@@ -166,7 +166,6 @@ class OrderController extends Controller
 
         return view('orders.checkout_success', compact('order'));
     }
-
 
     // GET /checkout/cancel — pago cancelado
     public function showCheckoutCancel(Request $request)
